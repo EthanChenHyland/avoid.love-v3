@@ -1,5 +1,5 @@
-import StoryExperience from "@/components/story/StoryExperience";
+import LoveStory from "@/components/love-story/LoveStory";
 
 export default function Home() {
-  return <StoryExperience />;
+  return <LoveStory />;
 }

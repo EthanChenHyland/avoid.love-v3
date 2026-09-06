@@ -7,8 +7,8 @@ import "./globals.css";
 import "./story.css";
 
 export const metadata: Metadata = {
-  title: "avoid.love — an interactive love story",
-  description: "A tactile love story about falling for someone, trying to avoid it, and failing.",
+  title: "avoid.love — love won anyway",
+  description: "An interactive story about falling in love, trying not to care, and failing beautifully.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
