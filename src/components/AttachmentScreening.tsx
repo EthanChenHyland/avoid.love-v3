@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -31,6 +32,7 @@ export default function AttachmentScreening() {
   const transitionRef = useRef<HTMLElement>(null);
   const evidenceRef = useRef<HTMLElement>(null);
   const archiveRef = useRef<HTMLElement>(null);
+  const distanceStoryRef = useRef<HTMLElement>(null);
   const interventionRef = useRef<HTMLElement>(null);
   const protocolRef = useRef<HTMLElement>(null);
   const voidRef = useRef<HTMLElement>(null);
@@ -47,6 +49,8 @@ export default function AttachmentScreening() {
   const [draftDeleted, setDraftDeleted] = useState(false);
   const [evidenceNote, setEvidenceNote] = useState("draft sequence reconstructed.");
   const [interventionLevel, setInterventionLevel] = useState(0);
+  const [distanceChecked, setDistanceChecked] = useState(false);
+  const [released, setReleased] = useState(false);
 
   useEffect(() => {
     const start = Date.now();
@@ -62,6 +66,10 @@ export default function AttachmentScreening() {
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    if (reduced || !finePointer) return;
 
     const onPointerMove = (event: PointerEvent) => {
       const x = event.clientX / window.innerWidth - 0.5;
@@ -114,6 +122,11 @@ export default function AttachmentScreening() {
     lenis.on("scroll", ScrollTrigger.update);
 
     const context = gsap.context(() => {
+      const media = gsap.matchMedia();
+
+      media.add({ isMobile: "(max-width: 640px)" }, (mediaContext) => {
+        const isMobile = Boolean(mediaContext.conditions?.isMobile);
+
       gsap.from(".hero-wordmark .char", {
         yPercent: 120,
         rotate: 2,
@@ -141,8 +154,8 @@ export default function AttachmentScreening() {
         delay: 0.42,
       });
 
-      gsap.from(".rig-carriage--them", {
-        x: 90,
+      gsap.from(".rig-carriage--them .rig-carriage-motion", {
+        x: isMobile ? 34 : 90,
         duration: 1.55,
         ease: "expo.out",
         delay: 0.65,
@@ -158,8 +171,8 @@ export default function AttachmentScreening() {
           },
         });
 
-        tl.to(".transition-node--left", { x: "34vw", ease: "none" }, 0)
-          .to(".transition-node--right", { x: "-34vw", ease: "none" }, 0)
+        tl.to(".transition-node--left", { x: isMobile ? "25vw" : "34vw", ease: "none" }, 0)
+          .to(".transition-node--right", { x: isMobile ? "-25vw" : "-34vw", ease: "none" }, 0)
           .to(".distance-rule", { scaleX: 0.14, ease: "none" }, 0)
           .to(".distance-value", { opacity: 0.15, y: -16, ease: "none" }, 0.2)
           .to(".collapse-warning", { opacity: 1, y: 0, ease: "none" }, 0.48)
@@ -185,9 +198,9 @@ export default function AttachmentScreening() {
             { y: "-2vh", scale: 1, rotate: -1.5, opacity: 1, ease: "none" },
             0.04,
           )
-          .to(".evidence-sheet--one", { x: -165, y: -88, scale: 1.22, rotate: -12, opacity: 0.24, filter: "blur(3px)", ease: "none" }, 0.08)
-          .to(".evidence-sheet--two", { x: 175, y: -76, scale: 1.16, rotate: 10, opacity: 0.3, filter: "blur(2px)", ease: "none" }, 0.08)
-          .to(".evidence-sheet--three", { x: -110, y: 72, scale: 1.06, rotate: 7, opacity: 0.5, ease: "none" }, 0.14)
+          .to(".evidence-sheet--one", { x: isMobile ? -72 : -165, y: isMobile ? -42 : -88, scale: isMobile ? 1.08 : 1.22, rotate: -12, opacity: 0.24, filter: isMobile ? "none" : "blur(3px)", ease: "none" }, 0.08)
+          .to(".evidence-sheet--two", { x: isMobile ? 76 : 175, y: isMobile ? -36 : -76, scale: isMobile ? 1.06 : 1.16, rotate: 10, opacity: 0.3, filter: isMobile ? "none" : "blur(2px)", ease: "none" }, 0.08)
+          .to(".evidence-sheet--three", { x: isMobile ? -46 : -110, y: isMobile ? 32 : 72, scale: 1.06, rotate: 7, opacity: 0.5, ease: "none" }, 0.14)
           .to(".evidence-depth-word--left", { x: -120, opacity: 0.15, ease: "none" }, 0)
           .to(".evidence-depth-word--right", { x: 120, opacity: 0.12, ease: "none" }, 0)
           .fromTo(".evidence-comment", { opacity: 0, y: 46 }, { opacity: 1, y: 0, ease: "none" }, 0.5)
@@ -215,6 +228,25 @@ export default function AttachmentScreening() {
           .to(".archive-thread path", { strokeDashoffset: -250, ease: "none" }, 0);
       }
 
+      if (distanceStoryRef.current) {
+        const distanceTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: distanceStoryRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1.15,
+          },
+        });
+
+        distanceTl
+          .fromTo(".distance-story__image", { scale: 1.08, xPercent: -1.5 }, { scale: 1.015, xPercent: 1.5, ease: "none" }, 0)
+          .to(".distance-pair--you", { x: "-8vw", opacity: 0.46, ease: "none" }, 0.08)
+          .to(".distance-pair--them", { x: "8vw", opacity: 0.46, ease: "none" }, 0.08)
+          .to(".distance-story__thread path", { strokeDashoffset: -180, ease: "none" }, 0)
+          .fromTo(".distance-question", { opacity: 0, y: 26 }, { opacity: 1, y: 0, ease: "none" }, 0.54)
+          .fromTo(".distance-petal", { y: -8, rotate: -8 }, { y: 32, rotate: 13, ease: "none" }, 0.2);
+      }
+
       if (interventionRef.current) {
         const interventionTl = gsap.timeline({
           scrollTrigger: {
@@ -227,10 +259,10 @@ export default function AttachmentScreening() {
 
         interventionTl
           .fromTo(".intervention-wheel", { rotate: -8, scale: 0.82 }, { rotate: 18, scale: 1.08, ease: "none" }, 0)
-          .fromTo(".task-slip--one", { x: "32vw", y: "18vh" }, { x: "-4vw", y: "-4vh", ease: "none" }, 0.03)
-          .fromTo(".task-slip--two", { x: "-28vw", y: "24vh" }, { x: "6vw", y: "3vh", ease: "none" }, 0.08)
-          .fromTo(".task-slip--three", { x: "24vw", y: "30vh" }, { x: "-8vw", y: "8vh", ease: "none" }, 0.14)
-          .fromTo(".task-slip--four", { x: "-22vw", y: "34vh" }, { x: "10vw", y: "13vh", ease: "none" }, 0.19)
+          .fromTo(".task-slip--one", { x: isMobile ? "14vw" : "32vw", y: isMobile ? "10vh" : "18vh" }, { x: isMobile ? "-2vw" : "-4vw", y: isMobile ? "-2vh" : "-4vh", ease: "none" }, 0.03)
+          .fromTo(".task-slip--two", { x: isMobile ? "-13vw" : "-28vw", y: isMobile ? "13vh" : "24vh" }, { x: isMobile ? "3vw" : "6vw", y: isMobile ? "2vh" : "3vh", ease: "none" }, 0.08)
+          .fromTo(".task-slip--three", { x: isMobile ? "12vw" : "24vw", y: isMobile ? "16vh" : "30vh" }, { x: isMobile ? "-4vw" : "-8vw", y: isMobile ? "4vh" : "8vh", ease: "none" }, 0.14)
+          .fromTo(".task-slip--four", { x: isMobile ? "-11vw" : "-22vw", y: isMobile ? "18vh" : "34vh" }, { x: isMobile ? "5vw" : "10vw", y: isMobile ? "7vh" : "13vh", ease: "none" }, 0.19)
           .to(".intervention-thread path", { strokeDashoffset: -380, ease: "none" }, 0)
           .fromTo(".intervention-escalation", { opacity: 0 }, { opacity: 1, ease: "none" }, 0.58);
       }
@@ -246,8 +278,8 @@ export default function AttachmentScreening() {
         });
 
         protocolTl
-          .to(".protocol-jaw--left", { x: "21vw", ease: "none" }, 0)
-          .to(".protocol-jaw--right", { x: "-21vw", ease: "none" }, 0)
+          .to(".protocol-jaw--left", { x: isMobile ? "15vw" : "21vw", ease: "none" }, 0)
+          .to(".protocol-jaw--right", { x: isMobile ? "-15vw" : "-21vw", ease: "none" }, 0)
           .to(".protocol-gap", { scaleX: 0.08, ease: "none" }, 0)
           .to(".protocol-needle", { rotate: 68, ease: "none" }, 0.04)
           .to(".protocol-thread", { scaleY: 1.42, ease: "none" }, 0.12)
@@ -286,14 +318,19 @@ export default function AttachmentScreening() {
 
         revealTl
           .fromTo(".reveal-wash", { opacity: 0 }, { opacity: 1, ease: "none" }, 0)
-          .to(".reveal-presence--you", { x: "10vw", ease: "none" }, 0.02)
-          .to(".reveal-presence--them", { x: "-10vw", ease: "none" }, 0.02)
+          .to(".reveal-presence--you", { x: isMobile ? "7vw" : "10vw", ease: "none" }, 0.02)
+          .to(".reveal-presence--them", { x: isMobile ? "-7vw" : "-10vw", ease: "none" }, 0.02)
           .to(".reveal-divider", { scaleX: 0, opacity: 0, ease: "none" }, 0.18)
           .to(".reveal-needle", { rotate: -42, opacity: 0.25, ease: "none" }, 0.08)
           .fromTo(".reveal-title", { y: "14vh", opacity: 0.15 }, { y: 0, opacity: 1, ease: "none" }, 0.3)
           .fromTo(".reveal-copy", { opacity: 0, y: 28 }, { opacity: 1, y: 0, ease: "none" }, 0.64)
+          .to(".reveal-machine", { opacity: 0, ease: "none" }, 0.58)
+          .to(".reveal-header", { opacity: 0.08, ease: "none" }, 0.72)
           .to(".reveal-thread path", { strokeDashoffset: -220, ease: "none" }, 0);
       }
+      });
+
+      return () => media.revert();
     }, rootRef);
 
     return () => {
@@ -346,11 +383,23 @@ export default function AttachmentScreening() {
   return (
     <main
       ref={rootRef}
-      className={`experience-shell ${choice ? `choice-${choice}` : ""} ${hesitationDetected ? "is-hesitating" : ""} intervention-level-${interventionLevel}`}
+      className={`experience-shell ${choice ? `choice-${choice}` : ""} ${hesitationDetected ? "is-hesitating" : ""} intervention-level-${interventionLevel} ${distanceChecked ? "is-distance-checked" : ""} ${released ? "is-released" : ""}`}
     >
       <section ref={heroRef} className="assessment-scene" aria-labelledby="screening-title">
         <div className="paper-field" aria-hidden="true" />
         <div className="hero-vignette" aria-hidden="true" />
+        <div className="hero-art" aria-hidden="true">
+          <Image
+            className="hero-art__image"
+            src="/art/hero-gpt.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+          />
+          <div className="hero-art__grade" />
+          <span className="hero-art__caption">EVIDENCE / FLOWER + LETTER + THREAD</span>
+        </div>
         <div className="screening-bench" aria-hidden="true">
           <span className="bench-seam bench-seam--one" />
           <span className="bench-seam bench-seam--two" />
@@ -360,7 +409,7 @@ export default function AttachmentScreening() {
         <header className="system-rail">
           <div className="system-id">
             <span className="status-dot" />
-            <span>ATTACHMENT SCREENING</span>
+            <span>00 / ATTACHMENT SCREENING</span>
           </div>
           <div className="rail-center">CASE / YOU</div>
           <div className="rail-time">ELAPSED {formatElapsed(elapsed)}</div>
@@ -384,9 +433,11 @@ export default function AttachmentScreening() {
             <div className="rig-clamp"><b /></div>
           </div>
           <div className="rig-carriage rig-carriage--them">
-            <div className="rig-yoke"><i /><i /></div>
-            <div className="rig-specimen rig-specimen--them"><span>THEM</span></div>
-            <div className="rig-clamp"><b /></div>
+            <div className="rig-carriage-motion">
+              <div className="rig-yoke"><i /><i /></div>
+              <div className="rig-specimen rig-specimen--them"><span>THEM</span></div>
+              <div className="rig-clamp"><b /></div>
+            </div>
           </div>
           <div className="rig-readout">
             <span>RECOMMENDED EMOTIONAL DISTANCE</span>
@@ -418,6 +469,11 @@ export default function AttachmentScreening() {
             <span>We need to ask you a few questions.</span>
             <span>This will only take a minute.</span>
             <em>Probably.</em>
+          </div>
+          <div className="beginning-log">
+            <span>FIRST ANOMALY / 00:43:12</span>
+            <strong>you stayed talking forty-three minutes longer than planned.</strong>
+            <em>you remembered the joke the next morning.</em>
           </div>
         </div>
 
@@ -460,7 +516,13 @@ export default function AttachmentScreening() {
       <section ref={transitionRef} className="distance-collapse" aria-label="Emotional distance calculation">
         <div className="transition-sticky">
           <div className="transition-grid" aria-hidden="true" />
-          <div className="transition-kicker">PROTOCOL 02 / MAINTAIN DISTANCE</div>
+          <div className="transition-kicker">01 / DENIAL ROUTINE</div>
+
+          <div className="denial-evidence" aria-hidden="true">
+            <Image src="/art/hero-gpt.png" alt="" fill sizes="32vw" />
+            <span>CLASSIFICATION / INCIDENTAL</span>
+            <i>MEANINGLESS</i>
+          </div>
 
           <div className="transition-measure" aria-hidden="true">
             <div className="transition-node transition-node--left">
@@ -488,8 +550,8 @@ export default function AttachmentScreening() {
           </div>
 
           <div className="collapse-warning">
-            <span>DISTANCE FAILURE</span>
-            <strong>that seems closer than recommended.</strong>
+            <span>DENIAL FAILURE</span>
+            <strong>you looked for them in the room anyway.</strong>
           </div>
 
           <svg className="transition-thread" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
@@ -498,7 +560,7 @@ export default function AttachmentScreening() {
 
           <div className="transition-curtain" aria-hidden="true">
             <div className="curtain-depth" />
-            <div className="curtain-copy">EVIDENCE FOUND</div>
+            <div className="curtain-copy">EVIDENCE FOUND / UNSENT</div>
           </div>
         </div>
       </section>
@@ -511,7 +573,7 @@ export default function AttachmentScreening() {
           <div className="evidence-depth-word evidence-depth-word--right" aria-hidden="true">made it home</div>
 
           <header className="evidence-header">
-            <span>03 / EVIDENCE REVIEW</span>
+            <span>02 / UNSENT</span>
             <span>CONFIDENCE 87%</span>
           </header>
 
@@ -565,6 +627,8 @@ export default function AttachmentScreening() {
             </footer>
           </article>
 
+          <span className="evidence-petal" aria-hidden="true" />
+
           <div className={`deleted-ghost ${draftDeleted ? "is-visible" : ""}`} aria-hidden="true">
             I keep thinking about—
           </div>
@@ -603,13 +667,17 @@ export default function AttachmentScreening() {
 
       <section ref={archiveRef} className="archive-scene" aria-labelledby="archive-title">
         <div className="archive-sticky">
+          <div className="archive-art" aria-hidden="true">
+            <Image className="archive-art__image" src="/art/archive-gpt-image-2.png" alt="" fill sizes="100vw" />
+            <div className="archive-art__grade" />
+          </div>
           <div className="archive-shadow archive-shadow--left" aria-hidden="true" />
           <div className="archive-shadow archive-shadow--right" aria-hidden="true" />
           <div className="archive-word" aria-hidden="true">EVIDENCE</div>
           <div className="archive-scanline" aria-hidden="true" />
 
           <header className="archive-header">
-            <span>04 / EVIDENCE INVENTORY</span>
+            <span>03 / THE LITTLE THINGS</span>
             <span>PLEASE DO NOT ASSIGN MEANING</span>
           </header>
 
@@ -666,6 +734,51 @@ export default function AttachmentScreening() {
         </div>
       </section>
 
+      <section ref={distanceStoryRef} className="distance-story" aria-labelledby="distance-story-title">
+        <div className="distance-story__sticky">
+          <Image
+            className="distance-story__image"
+            src="/art/distance-gpt-image-2.png"
+            alt=""
+            fill
+            sizes="100vw"
+          />
+          <div className="distance-story__shade" aria-hidden="true" />
+
+          <header className="distance-story__header">
+            <span>04 / DISTANCE</span>
+            <span>MESSAGES / LESS FREQUENT</span>
+          </header>
+
+          <div className="distance-story__copy">
+            <p>Something changed. The pauses got longer.</p>
+            <h2 id="distance-story-title">GOOD.</h2>
+            <span>the system considers this progress.</span>
+          </div>
+
+          <div className="distance-pair distance-pair--you" aria-hidden="true">
+            <span>YOU</span>
+            <b>23:18</b>
+          </div>
+          <div className="distance-pair distance-pair--them" aria-hidden="true">
+            <span>THEM</span>
+            <b>08:41</b>
+          </div>
+
+          <svg className="distance-story__thread" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M-80,610 C300,575 430,620 650,600 C900,576 1110,618 1690,580" />
+          </svg>
+          <span className="distance-petal" aria-hidden="true" />
+          <p className="distance-question">why are you still checking?</p>
+          <div className="distance-checkpoint">
+            <button type="button" onClick={() => setDistanceChecked(true)} disabled={distanceChecked}>
+              {distanceChecked ? "CHECKED." : "CHECK ANYWAY"}
+            </button>
+            <span>{distanceChecked ? "nothing new. you knew that before you looked." : "no new messages since 08:41"}</span>
+          </div>
+        </div>
+      </section>
+
       <section ref={interventionRef} className="intervention-scene" aria-labelledby="intervention-title">
         <div className="intervention-sticky">
           <div className="intervention-sun" aria-hidden="true" />
@@ -688,7 +801,12 @@ export default function AttachmentScreening() {
             <path d="M-50,530 C260,420 350,650 620,520 C850,410 985,610 1180,500 C1370,395 1510,490 1660,455" />
           </svg>
 
-          <div className="task-field" aria-hidden="true">
+          <div className="intervention-memory" aria-hidden="true">
+            <span className="intervention-memory__petal" />
+            <i>this reminded me of you</i>
+          </div>
+
+          <div className="task-field">
             <div className="task-slip task-slip--one"><span>01</span><strong>LEARN POTTERY</strong><em>estimated relief: 14 min</em></div>
             <div className="task-slip task-slip--two"><span>02</span><strong>REORGANIZE SPOTIFY</strong><em>do not make a playlist about this</em></div>
             <div className="task-slip task-slip--three"><span>03</span><strong>TAKE A WALK</strong><em>leave phone at home</em></div>
@@ -710,6 +828,10 @@ export default function AttachmentScreening() {
 
       <section ref={protocolRef} className="protocol-scene" aria-labelledby="protocol-title">
         <div className="protocol-sticky">
+          <div className="protocol-art" aria-hidden="true">
+            <Image className="protocol-art__image" src="/art/protocol-gpt-image-2.png" alt="" fill sizes="100vw" />
+            <div className="protocol-art__grade" />
+          </div>
           <div className="protocol-shell" aria-hidden="true">
             <div className="protocol-rail protocol-rail--top" />
             <div className="protocol-rail protocol-rail--bottom" />
@@ -741,6 +863,7 @@ export default function AttachmentScreening() {
             <p>Normal interventions failed.</p>
             <h2 id="protocol-title">HOLD<br />THE LINE.</h2>
           </div>
+          <p className="sr-only">Containment failed. Reciprocity is unknown. Thought frequency remains excessive.</p>
         </div>
       </section>
 
@@ -750,7 +873,7 @@ export default function AttachmentScreening() {
             <path d="M-100,480 C340,465 470,520 780,490 C1060,462 1290,510 1700,482" />
           </svg>
           <div className="void-remnant" aria-hidden="true">
-            <span>2.4</span><b>m</b><i />
+            <span className="void-petal" />
           </div>
           <div className="void-copy">
             <h2 id="void-title" className="void-line void-line--one">We tried.</h2>
@@ -763,6 +886,10 @@ export default function AttachmentScreening() {
 
       <section ref={revealRef} className="reveal-scene" aria-labelledby="reveal-title">
         <div className="reveal-sticky">
+          <div className="reveal-art" aria-hidden="true">
+            <Image className="reveal-art__image" src="/art/reveal-gpt-image-2.png" alt="" fill sizes="100vw" />
+            <div className="reveal-art__grade" />
+          </div>
           <div className="reveal-wash" aria-hidden="true" />
           <div className="reveal-machine" aria-hidden="true">
             <div className="reveal-rail" />
@@ -785,8 +912,11 @@ export default function AttachmentScreening() {
             <p>We&apos;re going to stop measuring now.</p>
             <h2 id="reveal-title" className="reveal-title">avoidance<br />failed.</h2>
             <div className="reveal-copy">
-              <strong>you can stop pretending in here.</strong>
-              <span>still thinking about them?</span>
+              <strong>{released ? "they mattered. that is the whole result." : "you can stop pretending in here."}</strong>
+              <span>{released ? "measurement ended" : "still thinking about them?"}</span>
+              <button type="button" onClick={() => setReleased(true)} disabled={released}>
+                {released ? "MACHINE OFF" : "STOP MEASURING"}
+              </button>
             </div>
           </div>
 
