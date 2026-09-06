@@ -1,6 +1,5 @@
-import AttachmentScreening from "@/components/AttachmentScreening";
+import StoryExperience from "@/components/story/StoryExperience";
 
 export default function Home() {
-  return <AttachmentScreening />;
+  return <StoryExperience />;
 }
-

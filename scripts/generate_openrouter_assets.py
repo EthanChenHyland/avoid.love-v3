@@ -36,6 +36,49 @@ wedding, neon, glossy 3D, stock romance, legible song lyrics, logos, and waterma
 
 
 PROMPTS = {
+    "motif": f"""
+{ART_DIRECTION}
+
+Create one isolated recurring romantic motif for avoid.love that can travel across
+multiple web scenes as a foreground object. A genuinely photographic pressed deep
+red flower, a small folded warm-ivory note with only illegible graphite marks, one
+loose petal, and a thin oxblood-red thread that curls through the cluster. Keep the
+objects compact in the center-right of a wide 16:9 canvas with generous empty space
+around them. The cluster should feel handled, fragile, intimate, and physically real,
+with subtle paper creases and natural shadows. Transparent background / alpha if the
+image model supports it; otherwise use a perfectly even warm neutral paper field that
+is easy to blend or mask. No readable text, no machinery, no Valentine's symbols,
+no hearts, no people, no watermark.
+""".strip(),
+    "motif-key": f"""
+{ART_DIRECTION}
+
+Create a clean isolated cutout asset of the recurring avoid.love romantic objects:
+one genuinely photographic pressed deep-red flower, a small folded warm-ivory note
+with only illegible graphite marks, one loose petal, and a thin oxblood-red thread
+curling through the cluster. Keep the cluster centered with nothing touching the
+frame. IMPORTANT: photograph the objects on one perfectly flat, uniform chroma-key
+green background (#00FF00), with no texture, gradient, vignette, table, border, or
+other scenery. Keep object edges crisp and keep cast shadows very tight to the
+objects so the green can be removed cleanly. No readable text, no machinery, no
+hearts, no people, no watermark.
+""".strip(),
+    "unsent": f"""
+{ART_DIRECTION}
+
+Create a wide cinematic late-night still life for the UNSENT chapter of avoid.love.
+A warm desk in an otherwise dark room holds several crumpled and rewritten ivory
+message drafts with deliberately illegible handwriting, a fountain pen, one cooling
+coffee cup, the same bruised pressed red flower, one loose petal, and the oxblood
+thread slipping between papers. A phone lies face-down near the edge with no visible
+screen or interface. The composition should feel like five private minutes spent
+rewriting something you were afraid to send: intimate, lonely, restrained, and very
+romantic without becoming sentimental. Keep the left third and upper left relatively
+dark and quiet for oversized typography; cluster the tactile evidence toward center
+and right. Warm amber practical light against deep brown-black falloff, photographic
+realism, shallow depth, film grain. No readable text, no people, no hearts, no logos,
+no watermark.
+""".strip(),
     "hero": f"""
 {ART_DIRECTION}
 
