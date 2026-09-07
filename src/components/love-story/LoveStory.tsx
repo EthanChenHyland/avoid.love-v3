@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import MemoryStormCanvas from "./MemoryStormCanvas";
 import useLoveMotion from "./useLoveMotion";
 
 const littleThings = [
@@ -32,8 +33,8 @@ type ThingKey = (typeof thingsToLose)[number][0];
 function Chapter({ number, label, light = false }: { number: string; label: string; light?: boolean }) {
   return (
     <div className={`chapter ${light ? "chapter--light" : ""}`} aria-hidden="true">
-      <span>{number}</span>
-      <span>{label}</span>
+      <span className="chapter__number">{number}</span>
+      <span className="chapter__label">{label}</span>
     </div>
   );
 }
@@ -127,13 +128,23 @@ export default function LoveStory() {
     returnTimers.current.set(key, timer);
   };
 
+  const moveLight = (event: React.PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / Math.max(rect.width, 1)) * 100;
+    const y = ((event.clientY - rect.top) / Math.max(rect.height, 1)) * 100;
+    event.currentTarget.style.setProperty("--light-x", `${x.toFixed(1)}%`);
+    event.currentTarget.style.setProperty("--light-y", `${y.toFixed(1)}%`);
+  };
+
   return (
     <main ref={rootRef} className={`love-journey ${letterOpen ? "love-journey--open" : ""}`}>
-      <aside className="journey-meter" aria-hidden="true">
-        <span className="journey-meter__brand">avoid.love</span>
-        <span className="journey-meter__line"><i /></span>
-        <span className="journey-meter__hint">a love story in ten small failures</span>
-      </aside>
+      <div className="journey-progress" aria-hidden="true"><i /></div>
+      <div className={`story-thread ${missing.has("thread") ? "is-cut" : ""}`} aria-hidden="true">
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <path className="story-thread__glow" pathLength="1" d="M -60 830 C 185 745 215 960 425 730 S 690 395 1060 180" />
+          <path className="story-thread__line" pathLength="1" d="M -60 830 C 185 745 215 960 425 730 S 690 395 1060 180" />
+        </svg>
+      </div>
 
       <section id="fine" className="scene scene--fine" data-chapter="00">
         <div className="fine-sticky">
@@ -169,10 +180,14 @@ export default function LoveStory() {
       <section id="them" className="scene scene--them" data-chapter="01">
         <div className="them-sticky">
           <Chapter number="01" label="THERE WAS THEM" />
+          <div className="them-word" aria-hidden="true">them</div>
           <div className="them-photo" aria-hidden="true">
             <Image src="/art/motif-gpt-image-1.png" alt="" fill sizes="(max-width: 700px) 92vw, 58vw" />
             <span className="them-photo__tape them-photo__tape--one" />
             <span className="them-photo__tape them-photo__tape--two" />
+          </div>
+          <div className="them-flower" aria-hidden="true">
+            <Image src="/art/motif-cutout.png" alt="" fill sizes="(max-width: 700px) 52vw, 28vw" />
           </div>
           <div className="them-copy">
             <p>the room did not stop.</p>
@@ -205,6 +220,7 @@ export default function LoveStory() {
                 key={title}
                 className={`keepsake keepsake--${index + 1} ${kept.has(index) ? "is-kept" : ""}`}
                 onClick={() => keepThing(index)}
+                onPointerMove={moveLight}
               >
                 <span>{eyebrow}</span>
                 <strong>{title}</strong>
@@ -220,14 +236,18 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="waiting" className="scene scene--waiting" data-chapter="03">
+      <section id="waiting" className={`scene scene--waiting waiting-checks--${Math.min(waitingChecks, 3)}`} data-chapter="03">
         <div className="waiting-sticky">
           <Image className="waiting-image" src="/art/unsent-gpt-image-1.png" alt="" fill sizes="100vw" />
           <div className="waiting-night" aria-hidden="true" />
           <div className="waiting-rain" aria-hidden="true" />
+          <div className="waiting-clock" aria-hidden="true">00:47</div>
+          <div className="waiting-echoes" aria-hidden="true">
+            <span>still?</span><span>still.</span><span>still.</span>
+          </div>
           <Chapter number="03" label="WAITING" light />
           <div className="waiting-copy">
-            <p>00:47</p>
+            <p>after midnight</p>
             <h2>You started<br /><em>waiting.</em></h2>
             <span>for a message. for a sign. for anything.</span>
           </div>
@@ -249,15 +269,16 @@ export default function LoveStory() {
             <span>erase the sentence. see what actually disappears.</span>
           </div>
           <div className={`draft-paper ${ghostDraft && !draft ? "is-erased" : ""}`}>
-            <header><span>21:48</span><span>unsent</span></header>
             <textarea value={draft} maxLength={180} aria-label="An unsent message" onChange={(event) => setDraft(event.currentTarget.value)} />
             {ghostDraft && !draft && <p className="draft-ghost" aria-hidden="true">{ghostDraft}</p>}
-            <footer>
-              <span>{draft.length}/180</span>
-              <button type="button" disabled={!draft && !ghostDraft} onClick={draft ? eraseDraft : restoreDraft}>
-                {draft ? "erase it" : "bring it back"}
-              </button>
-            </footer>
+            {ghostDraft && !draft && (
+              <div className="draft-debris" aria-hidden="true">
+                {ghostDraft.split(" ").map((word, index) => <span key={`${word}-${index}`}>{word}</span>)}
+              </div>
+            )}
+            <button className="draft-action" type="button" disabled={!draft && !ghostDraft} onClick={draft ? eraseDraft : restoreDraft}>
+              {draft ? "erase the words" : "bring them back"}
+            </button>
           </div>
           <div className="unsent-result" aria-live="polite">
             <span>{ghostDraft && !draft ? "the words are gone." : "the cursor waited with you."}</span>
@@ -275,11 +296,14 @@ export default function LoveStory() {
             <p>after a while,</p>
             <h2>ordinary things<br />became <em>yours.</em></h2>
           </div>
+          <div className="memory-bloom" aria-hidden="true">
+            <Image src="/art/motif-cutout.png" alt="" fill sizes="(max-width: 700px) 58vw, 34vw" />
+          </div>
           <div className="film-strip" aria-label="Shared memories">
             {memories.map(([number, title, note], index) => (
               <article className={`memory-frame memory-frame--${index + 1}`} key={title}>
                 <div className="memory-frame__image" aria-hidden="true"><span /></div>
-                <span>{number}</span>
+                <span className="sr-only">Memory {number}</span>
                 <strong>{title}</strong>
                 <p>{note}</p>
               </article>
@@ -289,10 +313,20 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="distance" className="scene scene--distance" data-chapter="06" style={{ "--distance": `${distance}%` } as React.CSSProperties}>
+      <section
+        id="distance"
+        className="scene scene--distance"
+        data-chapter="06"
+        style={{
+          "--distance": `${distance}%`,
+          "--distance-shift": `${Math.max(0, distance - 30) * 0.36}vw`,
+        } as React.CSSProperties}
+      >
         <div className="distance-sticky">
-          <Image className="distance-image" src="/art/distance-gpt-image-2.png" alt="" fill sizes="100vw" />
+          <div className="distance-half distance-half--you" aria-hidden="true" />
+          <div className="distance-half distance-half--them" aria-hidden="true" />
           <div className="distance-shade" aria-hidden="true" />
+          <div className="distance-giants" aria-hidden="true"><span>you</span><span>them</span></div>
           <Chapter number="06" label="DISTANCE" light />
           <div className="distance-copy">
             <p>then something changed.</p>
@@ -334,6 +368,7 @@ export default function LoveStory() {
                 key={key}
                 className={`loss-object loss-object--${key} loss-object--${index + 1} ${missing.has(key) ? "is-gone" : ""}`}
                 onClick={() => tryToLose(key)}
+                onPointerMove={moveLight}
               >
                 <span>{verb}</span>
                 <strong>{title}</strong>
@@ -342,7 +377,6 @@ export default function LoveStory() {
             ))}
           </div>
           <p className="trying-answer" aria-live="polite">{attemptLine}</p>
-          <div className="attempt-count" aria-hidden="true">attempts / {String(attempts).padStart(2, "0")}</div>
         </div>
       </section>
 
@@ -350,6 +384,8 @@ export default function LoveStory() {
         <div className="nothing-sticky">
           <Image className="nothing-image" src="/art/archive-gpt-image-2.png" alt="" fill sizes="100vw" />
           <div className="nothing-vignette" aria-hidden="true" />
+          <MemoryStormCanvas intensity={Math.max(1, attempts)} />
+          <div className="nothing-word" aria-hidden="true">nothing</div>
           <Chapter number="08" label="NOTHING DISAPPEARED" light />
           <div className="nothing-copy">
             <p>you did everything right.</p>
@@ -357,8 +393,8 @@ export default function LoveStory() {
             <span>not the flower. not the photo. not the sentence.</span>
           </div>
           <div className="return-cloud" aria-hidden="true">
-            <div className="return-piece return-piece--flower">✿</div>
-            <div className="return-piece return-piece--photo"><span /></div>
+            <div className="return-piece return-piece--flower"><Image src="/art/motif-cutout.png" alt="" fill sizes="22vw" /></div>
+            <div className="return-piece return-piece--photo"><Image src="/art/motif-gpt-image-1.png" alt="" fill sizes="22vw" /></div>
             <div className="return-piece return-piece--message">I keep thinking about you.</div>
             <div className="return-piece return-piece--ticket">row g · seat 12</div>
             <div className="return-piece return-piece--date">11</div>
@@ -372,6 +408,7 @@ export default function LoveStory() {
         <div className="love-sticky">
           <Image className="love-image" src="/art/reveal-gpt-image-2.png" alt="" fill sizes="100vw" />
           <div className="love-wash" aria-hidden="true" />
+          <div className="love-final-word" aria-hidden="true">love</div>
           <Chapter number="09" label="LOVE WON" />
           <div className="love-copy">
             <p>so much for avoiding it.</p>
@@ -391,7 +428,7 @@ export default function LoveStory() {
           </div>
           <footer className="love-footer">
             <span>avoid.love</span>
-            <span>{letterOpen ? "love retained" : "scrolling did not help"}</span>
+            <span>{letterOpen ? "keep it open." : "you already know."}</span>
           </footer>
         </div>
       </section>
