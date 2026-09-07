@@ -2180,6 +2180,12 @@
 .memory-frame p { margin: 9px 6px 0; color: #5e4c41; font-family: var(--font-serif); font-size: clamp(15px, 1.15vw, 18px); line-height: 1.18; letter-spacing: 0; }
 .memories-footnote { bottom: 6vh; font-size: clamp(30px, 2.8vw, 47px); line-height: .98; }
 
+@media (min-width: 1181px) {
+  .film-strip { top: 39vh; }
+  .memory-frame { width: min(372px, 26vw); min-height: 372px; }
+  .memory-frame__image { height: 210px; margin-bottom: 20px; }
+}
+
 .distance-half {
   position: absolute;
   z-index: 0;
@@ -2699,7 +2705,160 @@
   .scene--little { height: 285svh; }
   .keepsakes { inset: 46vh 8px 8vh; }
   .draft-paper { top: 54vh; min-height: 330px; }
+  .film-strip { top: 34vh; gap: 12vw; }
+  .memory-frame { width: 66vw; min-height: 270px; padding: 8px 8px 18px; }
+  .memory-frame__image { height: 135px; margin-bottom: 14px; }
+  .memory-frame strong { font-size: 27px; }
+  .memory-frame p { margin-top: 6px; font-size: 13px; line-height: 1.12; }
+  .memories-footnote { bottom: 1.5vh; width: 90vw; font-size: 18px; }
   .trying-table { inset: 48vh 8px 16vh; }
   .final-letter { top: 70vh; height: 225px; }
   .love-footer { bottom: 8px; }
+}
+
+/* Recovered living thread: visual-only fixed layer with deterministic spring geometry. */
+.story-thread__knot {
+  fill: #d9bda4;
+  stroke: #8e2029;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 2px 5px rgba(80, 18, 24, .34));
+}
+.story-thread.was-cut .story-thread__line { stroke-width: 1.65; }
+.story-thread.was-cut:not(.is-cut) .story-thread__line { stroke-dasharray: .48 .018 .5; }
+
+.memory-frame {
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y pinch-zoom;
+  will-change: transform;
+  transition: box-shadow .26s ease, filter .26s ease;
+}
+
+.memory-frame.is-dragging {
+  z-index: 78 !important;
+  cursor: grabbing;
+  box-shadow: 38px 52px 96px rgba(0,0,0,.5);
+  filter: saturate(1.04);
+}
+
+.memory-frame.was-moved::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  right: 15px;
+  bottom: 12px;
+  width: 26px;
+  height: 2px;
+  background: #8e2029;
+  opacity: .42;
+  transform: rotate(-8deg);
+}
+
+.memory-frame__image {
+  position: relative;
+  overflow: hidden;
+  background-image: var(--memory-image);
+}
+
+.memory-frame__image--develop {
+  --develop: .08;
+  --develop-x: 50%;
+  --develop-y: 50%;
+  --develop-radius: 22%;
+  background-image: var(--memory-image);
+  filter: sepia(.58) saturate(.58) contrast(.92) brightness(.84);
+  touch-action: none;
+}
+
+.memory-frame.is-developing { cursor: crosshair; }
+
+.memory-frame__developed {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: var(--memory-image) center / cover no-repeat;
+  clip-path: circle(var(--develop-radius) at var(--develop-x) var(--develop-y));
+  opacity: var(--develop);
+  filter: saturate(.96) contrast(1.02);
+  transition: opacity .12s linear;
+  pointer-events: none;
+}
+
+.memory-frame__image--develop::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  background: radial-gradient(circle at var(--develop-x) var(--develop-y), rgba(255,238,205,.24), transparent 23%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.memory-frame {
+  --pair-x: 0px;
+  --pair-y: 0px;
+  --memory-shadow-x: 24px;
+  --memory-shadow-y: 31px;
+  translate: var(--pair-x) var(--pair-y);
+  box-shadow: var(--memory-shadow-x) var(--memory-shadow-y) 58px rgba(0,0,0,.34);
+  transition: translate .46s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease, filter .22s ease;
+}
+
+.memory-frame[data-paired="true"] {
+  box-shadow: var(--memory-shadow-x) var(--memory-shadow-y) 64px rgba(0,0,0,.4), 0 0 0 1px rgba(143,37,45,.24);
+}
+
+.memory-frame[data-paired="true"]::before {
+  content: "";
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  bottom: -12px;
+  width: 44px;
+  height: 2px;
+  background: rgba(139,35,42,.5);
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.memory-frame__image.is-developed {
+  filter: none;
+  transition: filter .7s ease;
+}
+
+.memory-frame__image.is-developed .memory-frame__developed {
+  clip-path: none;
+  opacity: 1;
+}
+
+.memory-frame__develop-hint {
+  position: absolute;
+  z-index: 5;
+  left: 12px;
+  bottom: 10px;
+  padding: 5px 8px;
+  color: rgba(238,225,207,.86);
+  background: rgba(24,18,16,.28);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  opacity: .78;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+
+.memory-frame__image.is-developed .memory-frame__develop-hint { opacity: 0; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .memory-frame { cursor: default; will-change: auto; }
+  .memory-frame__image--develop { filter: none; }
+  .memory-frame__image--develop .memory-frame__developed { clip-path: none; opacity: 1; }
+  .memory-frame__develop-hint { display: none; }
+  .draft-debris { pointer-events: none; touch-action: auto; }
+
+  .memory-frame { touch-action: auto; }
 }

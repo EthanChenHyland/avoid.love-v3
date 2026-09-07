@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import InteractiveMemoryFrame from "./InteractiveMemoryFrame";
+import LivingThread from "./LivingThread";
 import MemoryStormCanvas from "./MemoryStormCanvas";
 import useLoveMotion from "./useLoveMotion";
 
@@ -48,6 +50,8 @@ export default function LoveStory() {
   const [waitingChecks, setWaitingChecks] = useState(0);
   const [draft, setDraft] = useState("I keep thinking about you.");
   const [ghostDraft, setGhostDraft] = useState("");
+  const [movedMemories, setMovedMemories] = useState<Set<number>>(() => new Set());
+  const [photoDeveloped, setPhotoDeveloped] = useState(false);
   const [distance, setDistance] = useState(36);
   const [distanceChecks, setDistanceChecks] = useState(0);
   const [missing, setMissing] = useState<Set<ThingKey>>(() => new Set());
@@ -111,6 +115,15 @@ export default function LoveStory() {
     setDraft(ghostDraft);
   };
 
+  const rememberMemoryMove = (index: number) => {
+    setMovedMemories((current) => {
+      if (current.has(index)) return current;
+      const next = new Set(current);
+      next.add(index);
+      return next;
+    });
+  };
+
   const tryToLose = (key: ThingKey) => {
     setAttempts((count) => count + 1);
     setLastAttempt(key);
@@ -139,12 +152,7 @@ export default function LoveStory() {
   return (
     <main ref={rootRef} className={`love-journey ${letterOpen ? "love-journey--open" : ""}`}>
       <div className="journey-progress" aria-hidden="true"><i /></div>
-      <div className={`story-thread ${missing.has("thread") ? "is-cut" : ""}`} aria-hidden="true">
-        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
-          <path className="story-thread__glow" pathLength="1" d="M -60 830 C 185 745 215 960 425 730 S 690 395 1060 180" />
-          <path className="story-thread__line" pathLength="1" d="M -60 830 C 185 745 215 960 425 730 S 690 395 1060 180" />
-        </svg>
-      </div>
+      <LivingThread cut={missing.has("thread")} scarred={false} tension={distance} />
 
       <section id="fine" className="scene scene--fine" data-chapter="00">
         <div className="fine-sticky">
@@ -287,7 +295,7 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="memories" className="scene scene--memories" data-chapter="05">
+      <section id="memories" className={`scene scene--memories ${photoDeveloped ? "has-developed-photo" : ""}`} data-chapter="05">
         <div className="memories-sticky">
           <Image className="memories-image" src="/art/archive-gpt-image-2.png" alt="" fill sizes="100vw" />
           <div className="memories-shade" aria-hidden="true" />
@@ -301,12 +309,16 @@ export default function LoveStory() {
           </div>
           <div className="film-strip" aria-label="Shared memories">
             {memories.map(([number, title, note], index) => (
-              <article className={`memory-frame memory-frame--${index + 1}`} key={title}>
-                <div className="memory-frame__image" aria-hidden="true"><span /></div>
-                <span className="sr-only">Memory {number}</span>
-                <strong>{title}</strong>
-                <p>{note}</p>
-              </article>
+              <InteractiveMemoryFrame
+                key={title}
+                index={index}
+                number={number}
+                title={title}
+                note={note}
+                moved={movedMemories.has(index)}
+                onMoved={rememberMemoryMove}
+                onDeveloped={() => setPhotoDeveloped(true)}
+              />
             ))}
           </div>
           <p className="memories-footnote">There was no moment where it became important.<br />It just kept becoming important.</p>
