@@ -55,6 +55,7 @@ export default function LoveStory() {
   const [movedMemories, setMovedMemories] = useState<Set<number>>(() => new Set());
   const [photoDeveloped, setPhotoDeveloped] = useState(false);
   const [distance, setDistance] = useState(36);
+  const [distanceDragging, setDistanceDragging] = useState(false);
   const [distanceChecks, setDistanceChecks] = useState(0);
   const [missing, setMissing] = useState<Set<ThingKey>>(() => new Set());
   const [lastAttempt, setLastAttempt] = useState<ThingKey | null>(null);
@@ -62,12 +63,14 @@ export default function LoveStory() {
   const [letterOpen, setLetterOpen] = useState(false);
   const returnTimers = useRef<Map<ThingKey, number>>(new Map());
   const restoreTimer = useRef<number | null>(null);
+  const distanceRaf = useRef<number | null>(null);
 
   useEffect(() => {
     const timers = returnTimers.current;
     return () => {
       timers.forEach((timer) => window.clearTimeout(timer));
       if (restoreTimer.current) window.clearTimeout(restoreTimer.current);
+      if (distanceRaf.current) cancelAnimationFrame(distanceRaf.current);
     };
   }, []);
 
@@ -138,6 +141,34 @@ export default function LoveStory() {
       next.add(index);
       return next;
     });
+  };
+
+  const releaseDistance = () => {
+    setDistanceDragging(false);
+    if (distance >= 36) return;
+
+    const target = 36;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDistance(target);
+      return;
+    }
+
+    if (distanceRaf.current) cancelAnimationFrame(distanceRaf.current);
+    let position = distance;
+    let velocity = 0;
+    const spring = () => {
+      velocity += (target - position) * 0.085;
+      velocity *= 0.78;
+      position += velocity;
+      setDistance(Number(position.toFixed(2)));
+      if (Math.abs(target - position) + Math.abs(velocity) > 0.08) {
+        distanceRaf.current = requestAnimationFrame(spring);
+      } else {
+        setDistance(target);
+        distanceRaf.current = null;
+      }
+    };
+    distanceRaf.current = requestAnimationFrame(spring);
   };
 
   const tryToLose = (key: ThingKey) => {
@@ -357,7 +388,7 @@ export default function LoveStory() {
             <h2>The pauses<br />got <em>longer.</em></h2>
             <span>one chair stayed empty.</span>
           </div>
-          <div className="distance-pull">
+          <div className={`distance-pull ${distanceDragging ? "is-pulling" : ""}`}>
             <div className="distance-pull__labels" aria-hidden="true"><span>you</span><span>them</span></div>
             <div className="distance-pull__thread" aria-hidden="true"><i /></div>
             <input
@@ -366,6 +397,9 @@ export default function LoveStory() {
               max="88"
               value={distance}
               aria-label="Pull the distance between you and them"
+              onPointerDown={() => setDistanceDragging(true)}
+              onPointerUp={releaseDistance}
+              onPointerCancel={releaseDistance}
               onChange={(event) => setDistance(Number(event.currentTarget.value))}
             />
             <small>{distance < 45 ? "close enough to pretend nothing changed" : distance < 72 ? "the thread stretches" : "still attached"}</small>

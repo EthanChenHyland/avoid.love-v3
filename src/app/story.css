@@ -1054,6 +1054,17 @@
   height: 28px;
   opacity: 0;
   cursor: ew-resize;
+  touch-action: pan-y;
+}
+
+.distance-pull.is-pulling .distance-pull__thread i {
+  height: 3px;
+  box-shadow: 0 0 32px rgba(195,48,57,.78);
+}
+
+.distance-pull.is-pulling .distance-pull__thread::before,
+.distance-pull.is-pulling .distance-pull__thread::after {
+  box-shadow: 0 0 0 9px rgba(217,195,167,.11), 0 0 28px rgba(164,34,43,.22);
 }
 
 .distance-pull small {
