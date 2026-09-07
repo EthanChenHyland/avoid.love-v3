@@ -52,7 +52,15 @@ export default function MemoryStormCanvas({ intensity = 1 }: { intensity?: numbe
     let raf = 0;
     let active = reduced;
     let last = performance.now();
-    const pointer = { x: 0.5, y: 0.5, active: false };
+    const pointer = {
+      x: 0.5,
+      y: 0.5,
+      active: false,
+      speed: 0,
+      lastX: 0.5,
+      lastY: 0.5,
+      lastTime: performance.now(),
+    };
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -104,10 +112,18 @@ export default function MemoryStormCanvas({ intensity = 1 }: { intensity?: numbe
             const dx = petal.x - pointer.x;
             const dy = petal.y - pointer.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 0.18 && distance > 0.001) {
-              const force = (0.18 - distance) * 0.0024 * petal.depth;
-              petal.x += (dx / distance) * force * delta;
-              petal.y += (dy / distance) * force * delta;
+            if (distance < 0.22 && distance > 0.001) {
+              const age = Math.max(0, time - pointer.lastTime);
+              const liveSpeed = pointer.speed * Math.max(0, 1 - age / 240);
+              const fast = liveSpeed > 0.0009;
+              const radius = fast ? 0.22 : 0.18;
+              if (distance < radius) {
+                const direction = fast ? 1 : -1;
+                const velocityForce = fast ? Math.min(2.8, 0.8 + liveSpeed * 2400) : 0.72;
+                const force = (radius - distance) * 0.0021 * petal.depth * velocityForce * direction;
+                petal.vx += (dx / distance) * force;
+                petal.vy += (dy / distance) * force;
+              }
             }
           }
 
@@ -123,8 +139,16 @@ export default function MemoryStormCanvas({ intensity = 1 }: { intensity?: numbe
 
     const onPointerMove = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
-      pointer.x = (event.clientX - rect.left) / Math.max(1, rect.width);
-      pointer.y = (event.clientY - rect.top) / Math.max(1, rect.height);
+      const now = performance.now();
+      const nextX = (event.clientX - rect.left) / Math.max(1, rect.width);
+      const nextY = (event.clientY - rect.top) / Math.max(1, rect.height);
+      const dt = Math.max(16, now - pointer.lastTime);
+      pointer.speed = Math.hypot(nextX - pointer.lastX, nextY - pointer.lastY) / dt;
+      pointer.x = nextX;
+      pointer.y = nextY;
+      pointer.lastX = nextX;
+      pointer.lastY = nextY;
+      pointer.lastTime = now;
       pointer.active = pointer.x >= 0 && pointer.x <= 1 && pointer.y >= 0 && pointer.y <= 1;
     };
 
