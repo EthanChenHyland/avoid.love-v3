@@ -36,9 +36,10 @@ export default function useLoveMotion(rootRef: RefObject<HTMLElement | null>) {
       root.style.setProperty("--story-progress", progress.toFixed(4));
     };
 
-    lenis.on("scroll", () => {
+    lenis.on("scroll", ({ direction }) => {
       ScrollTrigger.update();
       updateProgress();
+      root.dataset.scrollDirection = direction < 0 ? "backward" : "forward";
     });
     updateProgress();
 
@@ -192,6 +193,7 @@ export default function useLoveMotion(rootRef: RefObject<HTMLElement | null>) {
     return () => {
       context.revert();
       lenis.destroy();
+      delete root.dataset.scrollDirection;
       cancelAnimationFrame(rafId);
     };
   }, [rootRef]);

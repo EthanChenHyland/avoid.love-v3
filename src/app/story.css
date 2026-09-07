@@ -3336,3 +3336,40 @@
   .final-letter { top: 50vh; }
   .scene--love.is-open .final-letter__page { transform: none !important; }
 }
+
+/* Reverse scroll is allowed to feel like reconsidering without disturbing the layout. */
+.almost-backtrack {
+  position: absolute;
+  z-index: 86;
+  right: clamp(24px, 5vw, 82px);
+  bottom: 7vh;
+  margin: 0;
+  color: #76574a;
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.45vw, 25px);
+  font-style: italic;
+  line-height: 1.05;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .28s ease, transform .28s ease;
+  pointer-events: none;
+}
+
+.love-journey[data-scroll-direction="backward"] .almost-backtrack {
+  opacity: .72;
+  transform: translateY(0);
+}
+
+@media (max-width: 700px) {
+  .almost-backtrack {
+    right: 16px;
+    bottom: 4.5vh;
+    max-width: 44vw;
+    font-size: 17px;
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .almost-backtrack { display: none; }
+}

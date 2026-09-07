@@ -374,6 +374,7 @@ export default function LoveStory() {
           <p className="almost-result" aria-live="polite">
             {almostFolded ? "you folded it instead." : "swipe left across the paper."}
           </p>
+          <p className="almost-backtrack" aria-hidden="true">you came back to the line.</p>
         </div>
       </section>
 
