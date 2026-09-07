@@ -50,6 +50,7 @@ export default function LoveStory() {
   const [noticed, setNoticed] = useState<Set<number>>(() => new Set());
   const [kept, setKept] = useState<Set<number>>(() => new Set());
   const [waitingChecks, setWaitingChecks] = useState(0);
+  const [waitingLingered, setWaitingLingered] = useState(false);
   const [almostFolded, setAlmostFolded] = useState(false);
   const [draft, setDraft] = useState("I keep thinking about you.");
   const [ghostDraft, setGhostDraft] = useState("");
@@ -75,6 +76,49 @@ export default function LoveStory() {
       if (distanceRaf.current) cancelAnimationFrame(distanceRaf.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (waitingLingered) return;
+    const waiting = rootRef.current?.querySelector<HTMLElement>("#waiting .waiting-sticky");
+    if (!waiting) return;
+
+    let timer: number | null = null;
+    const clearLinger = () => {
+      if (timer === null) return;
+      window.clearTimeout(timer);
+      timer = null;
+    };
+    const evaluate = () => {
+      if (document.visibilityState !== "visible") {
+        clearLinger();
+        return;
+      }
+      const rect = waiting.getBoundingClientRect();
+      const viewportHeight = Math.max(1, window.innerHeight);
+      const visible = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0));
+      const ratio = visible / Math.min(Math.max(1, rect.height), viewportHeight);
+      if (ratio < 0.62) {
+        clearLinger();
+        return;
+      }
+      if (timer !== null) return;
+      timer = window.setTimeout(() => {
+        timer = null;
+        setWaitingLingered(true);
+      }, 2400);
+    };
+
+    evaluate();
+    window.addEventListener("scroll", evaluate, { passive: true });
+    window.addEventListener("resize", evaluate);
+    document.addEventListener("visibilitychange", evaluate);
+    return () => {
+      clearLinger();
+      window.removeEventListener("scroll", evaluate);
+      window.removeEventListener("resize", evaluate);
+      document.removeEventListener("visibilitychange", evaluate);
+    };
+  }, [waitingLingered]);
 
   const waitingLine = useMemo(() => {
     if (waitingChecks === 0) return "no message yet";
@@ -293,12 +337,12 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="waiting" className={`scene scene--waiting waiting-checks--${Math.min(waitingChecks, 3)}`} data-chapter="03">
+      <section id="waiting" className={`scene scene--waiting waiting-checks--${Math.min(waitingChecks, 3)} ${waitingLingered ? "has-lingered" : ""}`} data-chapter="03">
         <div className="waiting-sticky">
           <Image className="waiting-image" src="/art/unsent-gpt-image-1.png" alt="" fill sizes="100vw" />
           <div className="waiting-night" aria-hidden="true" />
           <div className="waiting-rain" aria-hidden="true" />
-          <div className="waiting-clock" aria-hidden="true">00:47</div>
+          <div className="waiting-clock" aria-hidden="true"><span>00:47</span><i>00:48</i></div>
           <div className="waiting-echoes" aria-hidden="true">
             <span>still?</span><span>still.</span><span>still.</span>
           </div>
@@ -314,6 +358,7 @@ export default function LoveStory() {
             <small aria-live="polite">{waitingLine}</small>
           </button>
           <p className="waiting-aside">The screen stayed dark.<br />You looked anyway.</p>
+          <p className="waiting-linger" aria-live="polite">{waitingLingered ? "you stayed long enough for the minute to change." : ""}</p>
         </div>
       </section>
 

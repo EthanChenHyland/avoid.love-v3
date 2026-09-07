@@ -109,7 +109,7 @@ export default function useLoveMotion(rootRef: RefObject<HTMLElement | null>) {
             .fromTo(".waiting-clock", { scale: 0.78, letterSpacing: "-.08em", opacity: 0.04 }, { scale: 1.18, letterSpacing: ".08em", opacity: 0.14, ease: "none" }, 0.04)
             .fromTo(".waiting-echoes span", { x: 0, opacity: 0 }, { x: (index) => (index + 1) * (mobile ? 18 : 42), opacity: 0.18, stagger: 0.1, ease: "none" }, 0.28)
             .fromTo(".waiting-copy", { y: 28, opacity: 0.48 }, { y: mobile ? -24 : -62, opacity: 1, ease: "none" }, 0.02)
-            .fromTo(".phone-check", { y: 60, opacity: 0, rotate: 3 }, { y: 0, opacity: 1, rotate: -1, ease: "none" }, 0.38)
+            .fromTo(".phone-check", { y: mobile ? 28 : 60, opacity: 0, rotate: 3 }, { y: 0, opacity: 1, rotate: -1, ease: "none" }, mobile ? 0.28 : 0.38)
             .fromTo(".waiting-aside", { opacity: 0 }, { opacity: 0.78, ease: "none" }, 0.62);
 
           gsap.timeline({
