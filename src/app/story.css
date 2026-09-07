@@ -2532,3 +2532,174 @@
     scroll-snap-align: center;
   }
 }
+
+
+/* V3.1 rebuild — typography/readability foundation. */
+.fine-copy,
+.them-copy,
+.little-heading,
+.waiting-copy,
+.waiting-aside,
+.unsent-copy,
+.unsent-result,
+.memories-copy,
+.memories-footnote,
+.distance-copy,
+.trying-copy,
+.trying-answer,
+.nothing-copy,
+.love-copy {
+  z-index: 86;
+}
+
+.them-copy,
+.little-heading,
+.waiting-copy,
+.unsent-copy,
+.memories-copy,
+.distance-copy,
+.trying-copy,
+.nothing-copy,
+.love-copy {
+  pointer-events: none;
+}
+
+.fine-copy h1,
+.fine-copy h2,
+.them-copy h2,
+.little-heading h2,
+.waiting-copy h2,
+.unsent-copy h2,
+.memories-copy h2,
+.distance-copy h2,
+.trying-copy h2,
+.nothing-copy h2,
+.love-copy h2 {
+  text-wrap: balance;
+}
+
+.them-copy h2,
+.waiting-copy h2,
+.unsent-copy h2,
+.memories-copy h2,
+.distance-copy h2,
+.nothing-copy h2,
+.love-copy h2 {
+  line-height: .74;
+}
+
+.little-heading h2,
+.trying-copy h2 {
+  line-height: .76;
+}
+
+.them-copy strong,
+.little-heading > span,
+.waiting-copy > span,
+.unsent-copy > span,
+.distance-copy > span,
+.trying-copy > strong,
+.nothing-copy > span,
+.love-copy > strong {
+  line-height: 1.12;
+  text-wrap: pretty;
+}
+
+/* Discovery copy stays quiet, but it should become legible once noticed. */
+.scroll-whisper { font-size: 11px; opacity: .72; }
+.fine-brand { opacity: .16; }
+.them-word { color: rgba(121, 41, 46, .105); }
+.waiting-echoes { opacity: .72; }
+.waiting-aside { line-height: 1.14; }
+.unsent-sticky::before { color: rgba(236, 222, 207, .062); }
+.trying-sticky::after { color: rgba(99,48,39,.075); }
+.nothing-word { color: rgba(222,191,174,.09); }
+.love-final-word { color: rgba(142,32,41,.1); }
+
+/* Give interactive compositions a real reading lane instead of relying on z-index alone. */
+.keepsakes { top: 36vh; }
+.trying-table { inset: 36vh 3vw 10vh; }
+.love-copy { width: min(780px, 52vw); }
+.final-letter { top: 36vh; right: 3vw; width: min(760px, 50vw); }
+
+@media (min-width: 701px) and (max-width: 1180px) {
+  .them-copy { width: min(520px, 45vw); }
+  .them-copy h2 { font-size: clamp(64px, 7.7vw, 96px); }
+  .notice-points { bottom: 5vh; }
+
+  .little-heading { width: min(610px, 54vw); }
+  .keepsakes { inset: 38vh 2vw 8vh; }
+
+  .waiting-copy { width: min(600px, 50vw); }
+  .waiting-copy h2 { font-size: clamp(76px, 8.7vw, 112px); }
+  .phone-check { right: 3vw; width: 43vw; grid-template-columns: 118px minmax(150px, 1fr); }
+
+  .unsent-copy { width: 48vw; }
+  .unsent-copy h2 { font-size: clamp(72px, 8vw, 104px); }
+  .draft-paper { right: 3vw; width: 46vw; top: 39vh; }
+
+  .memories-copy { width: 61vw; }
+  .trying-table { inset: 39vh 2vw 12vh; }
+  .nothing-copy { width: 66vw; }
+
+  .love-copy { width: 43vw; }
+  .love-copy > strong { max-width: 39vw; }
+  .love-copy h2 { font-size: clamp(84px, 9vw, 122px); }
+  .final-letter { right: 2vw; top: 46vh; width: 48vw; height: min(390px, 42vh); }
+}
+
+@media (max-width: 700px) {
+  .them-copy h2,
+  .little-heading h2,
+  .waiting-copy h2,
+  .unsent-copy h2,
+  .memories-copy h2,
+  .distance-copy h2,
+  .trying-copy h2,
+  .nothing-copy h2,
+  .love-copy h2 { line-height: .8; }
+
+  .them-copy strong,
+  .little-heading > span,
+  .waiting-copy > span,
+  .unsent-copy > span,
+  .distance-copy > span,
+  .trying-copy > strong,
+  .nothing-copy > span,
+  .love-copy > strong { line-height: 1.16; }
+
+  .them-photo { top: 43vh; }
+  .notice-points { bottom: 4vh; }
+
+  .scene--little { height: 250svh; }
+  .keepsakes { inset: 38vh 10px 10vh; }
+
+  .draft-paper { top: 48vh; }
+  .scene--trying { height: 255svh; }
+  .trying-table { inset: 39vh 10px 14vh; }
+
+  .scene--love { height: 205svh; }
+  .love-copy { width: 94vw; }
+  .final-letter { left: 5vw; right: 5vw; top: 64vh; width: auto; }
+}
+
+@media (max-width: 430px) {
+  .them-copy h2 { font-size: 15vw; }
+  .little-heading h2 { font-size: 16.5vw; }
+  .waiting-copy h2 { font-size: 16.5vw; }
+  .unsent-copy h2 { font-size: 15.5vw; }
+  .memories-copy h2 { font-size: 14.5vw; }
+  .distance-copy h2 { font-size: 15.5vw; }
+  .trying-copy h2 { font-size: 20vw; }
+  .nothing-copy h2 { font-size: 15.5vw; }
+  .love-copy h2 { font-size: 17.5vw; }
+}
+
+@media (max-width: 430px) and (max-height: 700px) {
+  .scene--little { height: 285svh; }
+  .keepsakes { inset: 46vh 8px 8vh; }
+  .draft-paper { top: 54vh; min-height: 330px; }
+  .trying-table { inset: 48vh 8px 16vh; }
+  .final-letter { top: 70vh; height: 225px; }
+  .love-footer { bottom: 8px; }
+}
