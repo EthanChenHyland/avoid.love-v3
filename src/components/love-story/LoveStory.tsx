@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import DraftDebris from "./DraftDebris";
 import InteractiveMemoryFrame from "./InteractiveMemoryFrame";
 import LivingThread from "./LivingThread";
 import MemoryStormCanvas from "./MemoryStormCanvas";
@@ -50,6 +51,7 @@ export default function LoveStory() {
   const [waitingChecks, setWaitingChecks] = useState(0);
   const [draft, setDraft] = useState("I keep thinking about you.");
   const [ghostDraft, setGhostDraft] = useState("");
+  const [restoringDraft, setRestoringDraft] = useState(false);
   const [movedMemories, setMovedMemories] = useState<Set<number>>(() => new Set());
   const [photoDeveloped, setPhotoDeveloped] = useState(false);
   const [distance, setDistance] = useState(36);
@@ -59,10 +61,14 @@ export default function LoveStory() {
   const [attempts, setAttempts] = useState(0);
   const [letterOpen, setLetterOpen] = useState(false);
   const returnTimers = useRef<Map<ThingKey, number>>(new Map());
+  const restoreTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const timers = returnTimers.current;
-    return () => timers.forEach((timer) => window.clearTimeout(timer));
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+      if (restoreTimer.current) window.clearTimeout(restoreTimer.current);
+    };
   }, []);
 
   const waitingLine = useMemo(() => {
@@ -71,6 +77,7 @@ export default function LoveStory() {
     if (waitingChecks === 2) return "you knew nothing had changed.";
     return "you checked anyway.";
   }, [waitingChecks]);
+  const ghostWords = useMemo(() => ghostDraft.trim().split(/\s+/).filter(Boolean), [ghostDraft]);
 
   const distanceLine = distanceChecks === 0
     ? "last message · 08:41"
@@ -111,8 +118,17 @@ export default function LoveStory() {
   };
 
   const restoreDraft = () => {
-    if (!ghostDraft) return;
-    setDraft(ghostDraft);
+    if (!ghostDraft || restoringDraft) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDraft(ghostDraft);
+      return;
+    }
+    setRestoringDraft(true);
+    restoreTimer.current = window.setTimeout(() => {
+      setDraft(ghostDraft);
+      setRestoringDraft(false);
+      restoreTimer.current = null;
+    }, 620);
   };
 
   const rememberMemoryMove = (index: number) => {
@@ -276,16 +292,12 @@ export default function LoveStory() {
             <h2>Then decided<br />it was <em>too much.</em></h2>
             <span>erase the sentence. see what actually disappears.</span>
           </div>
-          <div className={`draft-paper ${ghostDraft && !draft ? "is-erased" : ""}`}>
+          <div className={`draft-paper ${ghostDraft && !draft ? "is-erased" : ""} ${restoringDraft ? "is-restoring" : ""}`}>
             <textarea value={draft} maxLength={180} aria-label="An unsent message" onChange={(event) => setDraft(event.currentTarget.value)} />
             {ghostDraft && !draft && <p className="draft-ghost" aria-hidden="true">{ghostDraft}</p>}
-            {ghostDraft && !draft && (
-              <div className="draft-debris" aria-hidden="true">
-                {ghostDraft.split(" ").map((word, index) => <span key={`${word}-${index}`}>{word}</span>)}
-              </div>
-            )}
-            <button className="draft-action" type="button" disabled={!draft && !ghostDraft} onClick={draft ? eraseDraft : restoreDraft}>
-              {draft ? "erase the words" : "bring them back"}
+            {ghostDraft && !draft && <DraftDebris words={ghostWords} restoring={restoringDraft} />}
+            <button className="draft-action" type="button" disabled={restoringDraft || (!draft && !ghostDraft)} onClick={draft ? eraseDraft : restoreDraft}>
+              {draft ? "erase the words" : restoringDraft ? "the words remember" : "bring them back"}
             </button>
           </div>
           <div className="unsent-result" aria-live="polite">
