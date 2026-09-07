@@ -427,6 +427,27 @@ export default function LoveStory() {
               />
             ))}
           </div>
+          <div className="memory-collapse" aria-hidden="true">
+            {memories.map(([number, title], index) => (
+              <div
+                key={`collapse-${title}`}
+                className={`memory-collapse-card memory-collapse-card--${index + 1} ${movedMemories.has(index) ? "was-touched" : ""} ${index === 1 && photoDeveloped ? "is-developed" : ""}`}
+                style={{
+                  "--collapse-image": `url('${[
+                    "/art/motif-gpt-image-1.png",
+                    "/art/archive-gpt-image-2.png",
+                    "/art/distance-gpt-image-2.png",
+                    "/art/unsent-gpt-image-1.png",
+                    "/art/reveal-gpt-image-2.png",
+                  ][index]}')`,
+                } as React.CSSProperties}
+              >
+                <i>{number}</i>
+                <strong>{title}</strong>
+              </div>
+            ))}
+            <p>in the end, it was one ordinary day.</p>
+          </div>
           <p className="memories-footnote">There was no moment where it became important.<br />It just kept becoming important.</p>
         </div>
       </section>

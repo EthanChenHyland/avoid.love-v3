@@ -127,14 +127,28 @@ export default function useLoveMotion(rootRef: RefObject<HTMLElement | null>) {
             .fromTo(".draft-paper", { x: mobile ? "40vw" : "30vw", y: 90, rotate: 10, opacity: 0 }, { x: 0, y: mobile ? 0 : -30, rotate: -2, opacity: 1, ease: "none" }, 0.1)
             .fromTo(".unsent-result", { y: 30, opacity: 0 }, { y: 0, opacity: 1, ease: "none" }, 0.6);
 
-          gsap.timeline({
+          const memoryTimeline = gsap.timeline({
             scrollTrigger: { trigger: ".scene--memories", start: "top top", end: "bottom bottom", scrub: 1.05 },
-          })
+          });
+          memoryTimeline
             .fromTo(".memories-image", { scale: 1.14 }, { scale: 1.02, xPercent: 2.5, ease: "none" }, 0)
             .to(".memories-copy", { y: mobile ? -48 : -86, opacity: 0.32, ease: "none" }, 0.2)
             .fromTo(".memory-bloom", { xPercent: 30, yPercent: 32, rotate: 18, scale: 0.68, opacity: 0 }, { xPercent: mobile ? -8 : -26, yPercent: -18, rotate: -14, scale: mobile ? 1.05 : 1.3, opacity: 0.86, ease: "none" }, 0.2)
             .fromTo(".film-strip", { x: mobile ? "78vw" : "62vw" }, { x: mobile ? "-360vw" : "-112vw", ease: "none" }, 0.05)
-            .fromTo(".memories-footnote", { opacity: 0, y: 22 }, { opacity: 1, y: 0, ease: "none" }, 0.68);
+            .fromTo(".memories-footnote", { opacity: 0, y: 22 }, { opacity: 1, y: 0, ease: "none" }, 0.56)
+            .to(".memories-copy", { opacity: 0.08, ease: "none" }, 0.64)
+            .to(".film-strip", { opacity: 0.055, scale: 0.9, ease: "none" }, 0.68)
+            .to(".memory-bloom", { opacity: 0.16, scale: mobile ? 0.82 : 0.9, ease: "none" }, 0.7)
+            .fromTo(".memory-collapse", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, ease: "none" }, 0.68)
+            .fromTo(".memory-collapse-card--1", { x: mobile ? -185 : -460, y: mobile ? -150 : -190, rotate: -14, scale: 0.72, opacity: 0 }, { x: mobile ? -84 : -270, y: mobile ? -106 : -148, rotate: -8, scale: 0.86, opacity: 0.72, ease: "none" }, 0.69)
+            .fromTo(".memory-collapse-card--2", { x: mobile ? 180 : 450, y: mobile ? -170 : -215, rotate: 13, scale: 0.7, opacity: 0 }, { x: mobile ? 84 : 276, y: mobile ? -96 : -136, rotate: 7, scale: 0.82, opacity: 0.66, ease: "none" }, 0.71)
+            .fromTo(".memory-collapse-card--3", { x: mobile ? -180 : -430, y: mobile ? 155 : 205, rotate: 11, scale: 0.72, opacity: 0 }, { x: mobile ? -86 : -252, y: mobile ? 96 : 142, rotate: 5, scale: 0.8, opacity: 0.62, ease: "none" }, 0.73)
+            .fromTo(".memory-collapse-card--4", { x: mobile ? 184 : 440, y: mobile ? 168 : 220, rotate: -12, scale: 0.68, opacity: 0 }, { x: mobile ? 86 : 260, y: mobile ? 102 : 150, rotate: -6, scale: 0.78, opacity: 0.58, ease: "none" }, 0.75)
+            .fromTo(".memory-collapse-card--5", { y: mobile ? 150 : 190, rotate: -3, scale: 0.72, opacity: 0 }, { y: 0, rotate: 0, scale: mobile ? 1.02 : 1.12, opacity: 1, ease: "none" }, 0.72)
+            .to(".memory-collapse-card:not(.memory-collapse-card--5)", { x: 0, y: 0, scale: 0.66, opacity: 0.1, rotate: 0, ease: "none" }, 0.86)
+            .to(".memory-collapse-card--5", { scale: mobile ? 1.2 : 1.46, ease: "none" }, 0.86)
+            .fromTo(".memory-collapse > p", { opacity: 0, y: 20 }, { opacity: 1, y: 0, ease: "none" }, 0.88)
+            .to(".memories-footnote", { opacity: 0, ease: "none" }, 0.78);
 
           gsap.timeline({
             scrollTrigger: { trigger: ".scene--distance", start: "top top", end: "bottom bottom", scrub: 1 },
