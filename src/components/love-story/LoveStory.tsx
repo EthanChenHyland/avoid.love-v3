@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import DraftDebris from "./DraftDebris";
+import FoldedConfession from "./FoldedConfession";
 import InteractiveMemoryFrame from "./InteractiveMemoryFrame";
 import LivingThread from "./LivingThread";
 import MemoryStormCanvas from "./MemoryStormCanvas";
@@ -49,6 +50,7 @@ export default function LoveStory() {
   const [noticed, setNoticed] = useState<Set<number>>(() => new Set());
   const [kept, setKept] = useState<Set<number>>(() => new Set());
   const [waitingChecks, setWaitingChecks] = useState(0);
+  const [almostFolded, setAlmostFolded] = useState(false);
   const [draft, setDraft] = useState("I keep thinking about you.");
   const [ghostDraft, setGhostDraft] = useState("");
   const [restoringDraft, setRestoringDraft] = useState(false);
@@ -315,9 +317,24 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="unsent" className="scene scene--unsent" data-chapter="04">
+      <section id="almost-said-it" className={`scene scene--almost ${almostFolded ? "has-folded" : ""}`} data-chapter="04">
+        <div className="almost-sticky">
+          <Chapter number="04" label="ALMOST SAID IT" />
+          <div className="almost-copy">
+            <p>before you typed anything,</p>
+            <h2>You almost<br /><em>said it.</em></h2>
+            <strong>Then made the feeling smaller enough to carry.</strong>
+          </div>
+          <FoldedConfession folded={almostFolded} onFolded={() => setAlmostFolded(true)} />
+          <p className="almost-result" aria-live="polite">
+            {almostFolded ? "you folded it instead." : "swipe left across the paper."}
+          </p>
+        </div>
+      </section>
+
+      <section id="unsent" className="scene scene--unsent" data-chapter="05">
         <div className="unsent-sticky">
-          <Chapter number="04" label="ALMOST SAID TOO MUCH" light />
+          <Chapter number="05" label="ALMOST SAID TOO MUCH" light />
           <div className="unsent-copy">
             <p>you typed it.</p>
             <h2>Then decided<br />it was <em>too much.</em></h2>
@@ -338,11 +355,11 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="memories" className={`scene scene--memories ${photoDeveloped ? "has-developed-photo" : ""}`} data-chapter="05">
+      <section id="memories" className={`scene scene--memories ${photoDeveloped ? "has-developed-photo" : ""}`} data-chapter="06">
         <div className="memories-sticky">
           <Image className="memories-image" src="/art/archive-gpt-image-2.png" alt="" fill sizes="100vw" />
           <div className="memories-shade" aria-hidden="true" />
-          <Chapter number="05" label="YOU MADE MEMORIES" light />
+          <Chapter number="06" label="YOU MADE MEMORIES" light />
           <div className="memories-copy">
             <p>after a while,</p>
             <h2>ordinary things<br />became <em>yours.</em></h2>
@@ -371,7 +388,7 @@ export default function LoveStory() {
       <section
         id="distance"
         className="scene scene--distance"
-        data-chapter="06"
+        data-chapter="07"
         style={{
           "--distance": `${distance}%`,
           "--distance-shift": `${Math.max(0, distance - 30) * 0.36}vw`,
@@ -382,7 +399,7 @@ export default function LoveStory() {
           <div className="distance-half distance-half--them" aria-hidden="true" />
           <div className="distance-shade" aria-hidden="true" />
           <div className="distance-giants" aria-hidden="true"><span>you</span><span>them</span></div>
-          <Chapter number="06" label="DISTANCE" light />
+          <Chapter number="07" label="DISTANCE" light />
           <div className="distance-copy">
             <p>then something changed.</p>
             <h2>The pauses<br />got <em>longer.</em></h2>
@@ -411,9 +428,9 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="trying-not-to-care" className="scene scene--trying" data-chapter="07">
+      <section id="trying-not-to-care" className="scene scene--trying" data-chapter="08">
         <div className="trying-sticky">
-          <Chapter number="07" label="YOU TRIED NOT TO CARE" />
+          <Chapter number="08" label="YOU TRIED NOT TO CARE" />
           <div className="trying-copy">
             <p>fine.</p>
             <h2>Do something<br />about it.</h2>
@@ -438,13 +455,13 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="nothing-disappeared" className="scene scene--nothing" data-chapter="08">
+      <section id="nothing-disappeared" className="scene scene--nothing" data-chapter="09">
         <div className="nothing-sticky">
           <Image className="nothing-image" src="/art/archive-gpt-image-2.png" alt="" fill sizes="100vw" />
           <div className="nothing-vignette" aria-hidden="true" />
           <MemoryStormCanvas intensity={Math.max(1, attempts)} />
           <div className="nothing-word" aria-hidden="true">nothing</div>
-          <Chapter number="08" label="NOTHING DISAPPEARED" light />
+          <Chapter number="09" label="NOTHING DISAPPEARED" light />
           <div className="nothing-copy">
             <p>you did everything right.</p>
             <h2>Nothing really<br /><em>disappeared.</em></h2>
@@ -462,12 +479,12 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="love-won" className={`scene scene--love ${letterOpen ? "is-open" : ""}`} data-chapter="09">
+      <section id="love-won" className={`scene scene--love ${letterOpen ? "is-open" : ""}`} data-chapter="10">
         <div className="love-sticky">
           <Image className="love-image" src="/art/reveal-gpt-image-2.png" alt="" fill sizes="100vw" />
           <div className="love-wash" aria-hidden="true" />
           <div className="love-final-word" aria-hidden="true">love</div>
-          <Chapter number="09" label="LOVE WON" />
+          <Chapter number="10" label="LOVE WON" />
           <div className="love-copy">
             <p>so much for avoiding it.</p>
             <h2>Love won<br /><em>anyway.</em></h2>

@@ -2891,3 +2891,326 @@
 
   .memory-frame { touch-action: auto; }
 }
+
+/* Rebuilt Almost Said It: deterministic paper fold with a protected reading lane. */
+.scene--almost {
+  height: 210svh;
+  color: #352821;
+  background:
+    radial-gradient(circle at 78% 24%, rgba(143, 33, 42, .12), transparent 28%),
+    radial-gradient(circle at 16% 82%, rgba(91, 58, 39, .1), transparent 32%),
+    linear-gradient(118deg, #f0e8dc 0%, #dfd0bd 57%, #c8ab8d 100%);
+}
+
+.almost-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.almost-sticky::before {
+  content: "almost";
+  position: absolute;
+  z-index: 1;
+  right: -3vw;
+  bottom: -7vh;
+  color: rgba(117, 56, 52, .075);
+  font-family: var(--font-serif);
+  font-size: clamp(150px, 25vw, 420px);
+  font-style: italic;
+  font-weight: 420;
+  line-height: .72;
+  letter-spacing: -.08em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.almost-sticky::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background:
+    linear-gradient(103deg, rgba(255,255,255,.17), transparent 36% 72%, rgba(70,42,29,.07)),
+    repeating-linear-gradient(0deg, transparent 0 38px, rgba(80,52,37,.025) 38px 39px);
+  pointer-events: none;
+}
+
+.almost-copy {
+  position: absolute;
+  z-index: 86;
+  left: clamp(24px, 5.2vw, 86px);
+  top: 11vh;
+  width: min(560px, 39vw);
+  pointer-events: none;
+}
+
+.almost-copy p,
+.almost-copy strong,
+.almost-result {
+  margin: 0;
+  font-family: var(--font-serif);
+}
+
+.almost-copy p {
+  margin-bottom: 14px;
+  color: #8a5f4e;
+  font-size: clamp(18px, 1.45vw, 25px);
+  font-style: italic;
+  line-height: 1;
+}
+
+.almost-copy h2 {
+  margin: 0;
+  color: #33231f;
+  font-family: var(--font-serif);
+  font-size: clamp(80px, 8.4vw, 142px);
+  font-weight: 470;
+  line-height: .74;
+  letter-spacing: -.065em;
+  text-wrap: balance;
+}
+
+.almost-copy h2 em {
+  color: #86262d;
+  font-weight: 430;
+}
+
+.almost-copy strong {
+  display: block;
+  width: min(470px, 34vw);
+  margin-top: 26px;
+  color: #66493c;
+  font-size: clamp(20px, 1.7vw, 30px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.08;
+  text-wrap: pretty;
+}
+
+.almost-note {
+  --fold: 0;
+  --fold-angle: 0deg;
+  --fold-shadow: .08;
+  position: absolute;
+  z-index: 44;
+  right: 4.5vw;
+  top: 44vh;
+  width: min(730px, 49vw);
+  height: clamp(270px, 30vw, 440px);
+  padding: 0;
+  border: 0;
+  color: #503a30;
+  background: transparent;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  cursor: ew-resize;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.almost-note:focus-visible {
+  outline: 2px solid rgba(126, 32, 39, .7);
+  outline-offset: 9px;
+}
+
+.almost-note__left,
+.almost-note__right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  padding: clamp(24px, 2.7vw, 46px);
+  background:
+    linear-gradient(126deg, rgba(255,255,255,.38), transparent 29% 72%, rgba(102,68,46,.075)),
+    repeating-linear-gradient(0deg, rgba(111,77,56,.026) 0 1px, transparent 1px 5px),
+    #eadcc6;
+  box-shadow: 18px 26px 62px rgba(76,47,31,.18), inset 0 1px rgba(255,255,255,.62);
+}
+
+.almost-note__left {
+  left: 0;
+  z-index: 3;
+  display: grid;
+  align-content: center;
+  gap: clamp(12px, 1.2vw, 18px);
+  border-radius: 2px 0 0 2px;
+}
+
+.almost-note__left i,
+.almost-note__left em {
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 1.25vw, 22px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.almost-note__left i { color: #8a6655; }
+.almost-note__left em { color: #7d2a31; }
+
+.almost-note__left strong {
+  color: #7f2027;
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 4.7vw, 78px);
+  font-style: italic;
+  font-weight: 430;
+  line-height: .86;
+  letter-spacing: -.045em;
+}
+
+.almost-note__right {
+  left: 49.5%;
+  z-index: 4;
+  display: grid;
+  align-content: end;
+  gap: 13px;
+  border-left: 1px solid rgba(86,55,40,.12);
+  border-radius: 0 2px 2px 0;
+  transform: rotateY(var(--fold-angle));
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  box-shadow: 16px 26px 62px rgba(70,43,30,var(--fold-shadow));
+}
+
+.almost-note__right::after {
+  content: "still true.";
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18%;
+  border-radius: 0 2px 2px 0;
+  color: rgba(126, 53, 55, .34);
+  background:
+    linear-gradient(90deg, rgba(91,57,40,.09), transparent 7%),
+    linear-gradient(126deg, rgba(255,255,255,.35), transparent 28% 72%, rgba(102,68,46,.065)),
+    repeating-linear-gradient(0deg, rgba(111,77,56,.024) 0 1px, transparent 1px 5px),
+    #e7d8c1;
+  box-shadow: inset 1px 0 rgba(92,58,40,.13), inset 0 1px rgba(255,255,255,.58);
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2.35vw, 40px);
+  font-style: italic;
+  line-height: .94;
+  text-align: center;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.almost-note__right i {
+  position: relative;
+  z-index: 1;
+  color: #896a59;
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.35vw, 23px);
+  font-style: italic;
+  opacity: calc(1 - var(--fold));
+}
+
+.almost-note__right b {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 74%;
+  height: 1px;
+  background: rgba(128,32,39,.35);
+  opacity: calc(1 - var(--fold));
+}
+
+.almost-note__shadow {
+  position: absolute;
+  z-index: 1;
+  inset: 8% 5% -7%;
+  background: rgba(61,38,27,.26);
+  filter: blur(30px);
+  opacity: calc(.42 - var(--fold) * .18);
+  transform: translate3d(16px, 25px, -20px);
+  pointer-events: none;
+}
+
+.almost-note.is-folding { cursor: grabbing; }
+.almost-note.is-folded { cursor: default; }
+
+.almost-note.is-settling .almost-note__right,
+.almost-note.is-settling .almost-note__shadow {
+  transition: transform .44s cubic-bezier(.18,.82,.18,1), opacity .44s ease, box-shadow .44s ease;
+}
+
+.almost-result {
+  position: absolute;
+  z-index: 86;
+  left: clamp(24px, 5.2vw, 86px);
+  bottom: 7vh;
+  max-width: min(520px, 40vw);
+  color: #684a3d;
+  font-size: clamp(22px, 2vw, 34px);
+  font-style: italic;
+  line-height: 1.04;
+  pointer-events: none;
+}
+
+.scene--almost.has-folded .almost-result { color: #7d2a31; }
+
+@media (min-width: 701px) and (max-width: 1180px) {
+  .almost-copy { width: min(470px, 43vw); }
+  .almost-copy h2 { font-size: clamp(70px, 8vw, 104px); }
+  .almost-copy strong { width: 38vw; font-size: clamp(19px, 2vw, 26px); }
+  .almost-note { right: 2.5vw; top: 47vh; width: 51vw; height: clamp(260px, 34vw, 370px); }
+  .almost-result { max-width: 43vw; }
+}
+
+@media (max-width: 700px) {
+  .scene--almost { height: 190svh; }
+  .almost-sticky { min-height: 560px; }
+  .almost-sticky::before { right: -15vw; bottom: 2vh; font-size: 48vw; }
+  .almost-copy { left: 16px; top: 8vh; width: calc(100vw - 32px); }
+  .almost-copy p { margin-bottom: 10px; font-size: 16px; }
+  .almost-copy h2 { font-size: 16vw; line-height: .78; }
+  .almost-copy strong { width: 88vw; margin-top: 18px; font-size: 18px; line-height: 1.12; }
+  .almost-note {
+    left: 7vw;
+    right: auto;
+    top: 44vh;
+    width: 86vw;
+    height: clamp(240px, 36vh, 320px);
+  }
+  .almost-note__left,
+  .almost-note__right { padding: clamp(18px, 5vw, 26px); }
+  .almost-note__left strong { font-size: 10.5vw; }
+  .almost-note__left i,
+  .almost-note__left em,
+  .almost-note__right i { font-size: 15px; }
+  .almost-note__right::after { font-size: 7vw; }
+  .almost-result { left: 16px; bottom: 5vh; max-width: 88vw; font-size: 24px; }
+}
+
+@media (max-width: 430px) {
+  .almost-copy h2 { font-size: 15.5vw; }
+  .almost-note { left: 6vw; width: 88vw; }
+}
+
+@media (max-width: 430px) and (max-height: 700px) {
+  .scene--almost { height: 205svh; }
+  .almost-copy { top: 7vh; }
+  .almost-copy strong { margin-top: 12px; font-size: 16px; }
+  .almost-note { top: 43vh; height: min(34vh, 225px); }
+  .almost-result { bottom: 4vh; font-size: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene--almost { height: auto; min-height: 115svh; }
+  .almost-sticky { position: relative; min-height: 115svh; }
+  .almost-copy,
+  .almost-note,
+  .almost-result { opacity: 1 !important; transform: none !important; }
+  .almost-note.is-settling .almost-note__right,
+  .almost-note.is-settling .almost-note__shadow { transition: none; }
+}

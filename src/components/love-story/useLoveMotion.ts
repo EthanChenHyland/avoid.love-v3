@@ -113,6 +113,13 @@ export default function useLoveMotion(rootRef: RefObject<HTMLElement | null>) {
             .fromTo(".waiting-aside", { opacity: 0 }, { opacity: 0.78, ease: "none" }, 0.62);
 
           gsap.timeline({
+            scrollTrigger: { trigger: ".scene--almost", start: "top 84%", end: "bottom 18%", scrub: 0.9 },
+          })
+            .fromTo(".almost-copy", { y: mobile ? 42 : 68, opacity: 0 }, { y: 0, opacity: 1, ease: "none" }, 0)
+            .fromTo(".almost-note", { y: mobile ? 32 : 44, rotate: 7, scale: 0.94, opacity: 0 }, { y: 0, rotate: -2, scale: 1, opacity: 1, ease: "none" }, 0.08)
+            .fromTo(".almost-result", { y: 10 }, { y: 0, ease: "none" }, 0.16);
+
+          gsap.timeline({
             scrollTrigger: { trigger: ".scene--unsent", start: "top 80%", end: "bottom 18%", scrub: 0.95 },
           })
             .fromTo(".unsent-copy", { x: mobile ? -30 : -85, opacity: 0 }, { x: 0, opacity: 1, ease: "none" }, 0)
