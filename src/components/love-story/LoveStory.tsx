@@ -64,15 +64,18 @@ export default function LoveStory() {
   const [lastAttempt, setLastAttempt] = useState<ThingKey | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [letterOpen, setLetterOpen] = useState(false);
+  const [letterHolding, setLetterHolding] = useState(false);
   const returnTimers = useRef<Map<ThingKey, number>>(new Map());
   const restoreTimer = useRef<number | null>(null);
   const distanceRaf = useRef<number | null>(null);
+  const letterHoldTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const timers = returnTimers.current;
     return () => {
       timers.forEach((timer) => window.clearTimeout(timer));
       if (restoreTimer.current) window.clearTimeout(restoreTimer.current);
+      if (letterHoldTimer.current) window.clearTimeout(letterHoldTimer.current);
       if (distanceRaf.current) cancelAnimationFrame(distanceRaf.current);
     };
   }, []);
@@ -240,6 +243,46 @@ export default function LoveStory() {
     const y = ((event.clientY - rect.top) / Math.max(rect.height, 1)) * 100;
     event.currentTarget.style.setProperty("--light-x", `${x.toFixed(1)}%`);
     event.currentTarget.style.setProperty("--light-y", `${y.toFixed(1)}%`);
+  };
+
+  const clearLetterHold = () => {
+    if (letterHoldTimer.current !== null) {
+      window.clearTimeout(letterHoldTimer.current);
+      letterHoldTimer.current = null;
+    }
+    setLetterHolding(false);
+  };
+
+  const openLetter = () => {
+    clearLetterHold();
+    setLetterOpen(true);
+  };
+
+  const beginLetterHold = () => {
+    if (letterOpen) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      openLetter();
+      return;
+    }
+
+    clearLetterHold();
+    setLetterHolding(true);
+    letterHoldTimer.current = window.setTimeout(() => {
+      letterHoldTimer.current = null;
+      setLetterHolding(false);
+      setLetterOpen(true);
+    }, 620);
+  };
+
+  const finishLetterPointer = (event: React.PointerEvent<HTMLButtonElement>) => {
+    clearLetterHold();
+    if (event.button === 0 || event.pointerType === "touch") openLetter();
+  };
+
+  const openLetterFromKeyboard = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    openLetter();
   };
 
   return (
@@ -557,15 +600,25 @@ export default function LoveStory() {
             <h2>Love won<br /><em>anyway.</em></h2>
             <strong>You can stop pretending in here.</strong>
           </div>
-          <div className="final-letter">
+          <div className={`final-letter ${letterHolding ? "is-holding" : ""}`}>
             <div className="final-letter__back" />
             <div className="final-letter__page">
               <span>{letterOpen ? "you kept all of it because it mattered." : "still thinking about them?"}</span>
               <strong>{letterOpen ? "that was the answer." : "you already know."}</strong>
             </div>
             <div className="final-letter__flap" aria-hidden="true" />
-            <button type="button" onClick={() => setLetterOpen(true)} disabled={letterOpen}>
-              {letterOpen ? "leave it open" : "open the letter"}
+            <button
+              type="button"
+              aria-pressed={letterOpen}
+              onPointerDown={beginLetterHold}
+              onPointerUp={finishLetterPointer}
+              onPointerLeave={clearLetterHold}
+              onPointerCancel={clearLetterHold}
+              onKeyDown={openLetterFromKeyboard}
+              onClick={openLetter}
+              disabled={letterOpen}
+            >
+              {letterOpen ? "leave it open" : letterHolding ? "keep holding · or tap" : "open the letter"}
             </button>
           </div>
           <footer className="love-footer">
