@@ -51,7 +51,7 @@
   justify-content: space-between;
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(38, 29, 24, .2);
-  color: rgba(38, 29, 24, .64);
+  color: rgba(38, 29, 24, .82);
   font-family: var(--font-mono);
   font-size: 8px;
   letter-spacing: .19em;
@@ -59,7 +59,7 @@
 }
 
 .chapter--light {
-  color: rgba(242, 231, 216, .72);
+  color: rgba(242, 231, 216, .88);
   border-color: rgba(242, 231, 216, .18);
   text-shadow: 0 2px 18px rgba(0, 0, 0, .42);
 }
@@ -75,7 +75,7 @@
   align-items: center;
   gap: 16px;
   pointer-events: none;
-  color: rgba(239, 228, 211, .68);
+  color: rgba(239, 228, 211, .82);
   mix-blend-mode: difference;
   font-family: var(--font-mono);
   font-size: 7px;
@@ -217,7 +217,7 @@
   display: block;
   max-width: 420px;
   margin-top: 30px;
-  color: #6c5f55;
+  color: #51463f;
   font-family: var(--font-mono);
   font-size: 9px;
   line-height: 1.55;
@@ -402,7 +402,7 @@
   width: 100%;
   padding: 0;
   border: 0;
-  color: #6e6158;
+  color: #554940;
   background: transparent;
   cursor: pointer;
   text-align: left;
@@ -465,7 +465,7 @@
 .little-heading > span {
   display: block;
   margin-top: 19px;
-  color: #6c5546;
+  color: #503d32;
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: .08em;
@@ -621,7 +621,7 @@
 .waiting-copy > span {
   display: block;
   margin-top: 22px;
-  color: #b9aca0;
+  color: #e0d4c8;
   font-family: var(--font-serif);
   font-size: clamp(20px, 2vw, 33px);
   font-style: italic;
@@ -677,7 +677,7 @@
 }
 
 .phone-check small {
-  color: #a89b90;
+  color: #c9bdb2;
   font-family: var(--font-mono);
   font-size: 9px;
   line-height: 1.45;
@@ -690,7 +690,7 @@
   left: 5vw;
   bottom: 9vh;
   margin: 0;
-  color: #a4968a;
+  color: #cabdb1;
   font-family: var(--font-mono);
   font-size: 9px;
   line-height: 1.6;
@@ -737,7 +737,7 @@
 .unsent-copy > span {
   display: block;
   margin-top: 18px;
-  color: #9e9085;
+  color: #c9b9ac;
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: .08em;
@@ -844,7 +844,7 @@
   display: grid;
   gap: 6px;
   width: min(520px, 38vw);
-  color: #a49387;
+  color: #d2c2b5;
 }
 
 .unsent-result span {
@@ -854,7 +854,7 @@
 }
 
 .unsent-result strong {
-  color: #d1c0b0;
+  color: #f0dfcf;
   font-family: var(--font-serif);
   font-size: clamp(27px, 2.6vw, 44px);
   font-style: italic;
@@ -1324,7 +1324,6 @@
 .return-piece--photo span { position: absolute; inset: 13px 13px 45px; background: linear-gradient(135deg, #332827, #a47d70 49%, #241f1f); }
 .return-piece--message { left: 31vw; bottom: 9vh; width: min(450px, 34vw); font-size: 30px; }
 .return-piece--ticket { left: 7vw; bottom: 13vh; min-width: 190px; font-family: var(--font-mono); font-size: 8px; letter-spacing: .09em; }
-.return-piece--date { right: 34vw; top: 63vh; min-width: 112px; min-height: 112px; color: var(--red); font-size: 58px; }
 .return-piece--note { right: 6vw; bottom: 9vh; width: 250px; }
 
 .nothing-thread {
@@ -1629,7 +1628,6 @@
   .return-piece--flower { right: 5vw; top: 43vh; min-width: 120px; min-height: 120px; font-size: 52px; }
   .return-piece--message { left: 10vw; bottom: 19vh; width: 76vw; font-size: 23px; }
   .return-piece--ticket { left: 5vw; bottom: 7vh; min-width: 42vw; font-size: 7px; }
-  .return-piece--date { right: 7vw; top: 65vh; min-width: 90px; min-height: 90px; font-size: 44px; }
   .return-piece--note { right: 5vw; bottom: 5vh; width: 43vw; }
 
   .scene--love { height: 170svh; }
@@ -2260,6 +2258,10 @@
 .memories-footnote { bottom: 6vh; font-size: clamp(30px, 2.8vw, 47px); line-height: .98; }
 
 @media (min-width: 1181px) {
+  .unsent-copy { width: min(600px, 42vw); }
+  .draft-paper { right: 4vw; width: min(590px, 41vw); }
+  .return-piece--photo { top: 48vh; }
+
   .film-strip { top: 39vh; }
   .memory-frame { width: min(372px, 26vw); min-height: 372px; }
   .memory-frame__image { height: 210px; margin-bottom: 20px; }
@@ -2381,8 +2383,40 @@
 .return-piece--photo { left: 5vw; top: 44vh; width: min(330px, 24vw); height: 330px; padding: 12px 12px 58px; background: #ece1d2; box-shadow: 24px 34px 66px rgba(0,0,0,.38); }
 .return-piece--photo img { object-fit: cover; padding: 12px 12px 58px; }
 .return-piece--message { left: 23vw; bottom: 8vh; width: min(700px, 52vw); font-size: clamp(42px, 5vw, 82px); line-height: .8; }
+
+.return-piece--photo.is-remembered::after {
+  content: "you moved this.";
+  position: absolute;
+  right: 12px;
+  bottom: 20px;
+  z-index: 2;
+  font-size: clamp(10px, .8vw, 13px);
+  line-height: 1;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(67, 43, 34, .84);
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+
+.return-piece--message.is-remembered {
+  text-decoration-line: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(239, 225, 205, .5);
+}
+
+.return-piece--message.is-remembered::after {
+  content: "you erased this.";
+  display: block;
+  margin-top: .55em;
+  font-size: clamp(11px, .85vw, 14px);
+  line-height: 1;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  opacity: .9;
+}
 .return-piece--ticket { left: 6vw; bottom: 10vh; min-width: 240px; padding: 18px 28px; color: #3b2e28; background: #d7ba96; box-shadow: 16px 22px 42px rgba(0,0,0,.28); font-family: var(--font-serif); font-size: 18px; font-style: italic; letter-spacing: 0; text-shadow: none; clip-path: polygon(0 9%,4% 0,96% 0,100% 9%,97% 25%,100% 42%,97% 58%,100% 76%,96% 100%,4% 100%,0 91%,3% 74%,0 56%,3% 39%,0 22%); }
-.return-piece--date { right: 30vw; top: 58vh; min-width: 0; min-height: 0; color: #d75b61; font-size: clamp(96px, 10vw, 160px); background: transparent; }
 .return-piece--note { right: 7vw; bottom: 8vh; width: 290px; padding: 23px; color: #47352d; background: #e8d9c3; box-shadow: 18px 26px 50px rgba(0,0,0,.3); text-shadow: none; font-size: 23px; }
 .nothing-thread { z-index: 61; height: 2px; }
 .nothing-thread i { height: 2px; }
@@ -2558,7 +2592,6 @@
   .return-piece--photo { left: -4vw; top: 46vh; width: 52vw; height: 245px; }
   .return-piece--message { left: 8vw; bottom: 19vh; width: 84vw; font-size: 10vw; }
   .return-piece--ticket { left: 4vw; bottom: 7vh; min-width: 45vw; padding: 15px 18px; font-size: 15px; }
-  .return-piece--date { right: 9vw; top: 67vh; font-size: 24vw; }
   .return-piece--note { right: 4vw; bottom: 4vh; width: 47vw; padding: 16px; font-size: 17px; }
 
   .scene--love { height: 190svh; }
@@ -3189,11 +3222,46 @@
 }
 
 .almost-note.is-folding { cursor: grabbing; }
-.almost-note.is-folded { cursor: default; }
+.almost-note.is-folded { cursor: pointer; }
+
+/* Regression cleanup: essential copy keeps a protected reading lane. */
+.waiting-copy,
+.almost-copy,
+.unsent-copy,
+.memories-copy,
+.distance-copy,
+.trying-copy,
+.nothing-copy,
+.love-copy {
+  opacity: 1;
+}
+
+.waiting-copy,
+.unsent-copy,
+.memories-copy,
+.distance-copy,
+.nothing-copy,
+.love-copy {
+  text-shadow: 0 10px 34px rgba(0, 0, 0, .56);
+}
+
+.scene--love.is-open .final-letter__page span {
+  font-size: clamp(24px, 2.35vw, 40px);
+  line-height: 1.04;
+}
+
+.scene--love.is-open .final-letter__page strong {
+  line-height: .94;
+}
 
 .almost-note.is-settling .almost-note__right,
 .almost-note.is-settling .almost-note__shadow {
-  transition: transform .44s cubic-bezier(.18,.82,.18,1), opacity .44s ease, box-shadow .44s ease;
+  transition: transform .58s cubic-bezier(.16,.84,.16,1), opacity .52s ease, box-shadow .58s ease;
+}
+
+.almost-note.is-settling .almost-note__right i,
+.almost-note.is-settling .almost-note__right b {
+  transition: opacity .42s cubic-bezier(.2,.72,.18,1);
 }
 
 .almost-result {
@@ -3220,6 +3288,45 @@
 }
 
 @media (max-width: 700px) {
+  .memories-copy,
+  .nothing-copy,
+  .love-copy,
+  .unsent-copy,
+  .almost-copy,
+  .trying-copy,
+  .waiting-copy,
+  .distance-copy {
+    left: 16px;
+    width: calc(100vw - 32px);
+  }
+
+  .film-strip { top: 44vh; }
+
+  .return-piece--flower {
+    right: -24vw;
+    top: 45vh;
+  }
+
+  .unsent-result {
+    left: 16px;
+    top: 36vh;
+    bottom: auto;
+    width: calc(100vw - 32px);
+  }
+
+  .draft-paper {
+    left: 6vw;
+    right: auto;
+    top: 48vh;
+    width: 88vw;
+  }
+
+  .almost-backtrack { bottom: 12vh; }
+
+  .scene--love.is-open .final-letter__page span {
+    font-size: clamp(20px, 5.8vw, 26px);
+  }
+
   .scene--almost { height: 190svh; }
   .almost-sticky { min-height: 560px; }
   .almost-sticky::before { right: -15vw; bottom: 2vh; font-size: 48vw; }
@@ -3250,6 +3357,38 @@
 }
 
 @media (max-width: 430px) and (max-height: 700px) {
+  .film-strip { top: 45vh; }
+
+  .unsent-result {
+    top: 38vh;
+    font-size: 16px;
+  }
+
+  .draft-paper {
+    top: 52vh;
+    min-height: 240px;
+    padding: 18px 20px 16px;
+  }
+
+  .draft-paper textarea {
+    min-height: 120px;
+    margin-top: 12px;
+    padding: 16px 0;
+    font-size: clamp(30px, 9vw, 38px);
+  }
+
+  .draft-ghost {
+    left: 20px;
+    right: 20px;
+    top: 76px;
+    font-size: clamp(30px, 9vw, 38px);
+  }
+
+  .return-piece--flower {
+    top: 49vh;
+    right: -30vw;
+  }
+
   .scene--almost { height: 205svh; }
   .almost-copy { top: 7vh; }
   .almost-copy strong { margin-top: 12px; font-size: 16px; }
@@ -3571,5 +3710,904 @@
 @media (prefers-reduced-motion: reduce) and (max-width: 430px) and (max-height: 700px) {
   .scene--love.is-open .final-letter__page {
     transform: none !important;
+  }
+}
+
+/* Final regression guardrails: keep readable copy and large objects in separate lanes. */
+.unsent-result {
+  color: #d6c7b9;
+  text-shadow: 0 8px 28px rgba(0, 0, 0, .48);
+}
+
+.unsent-result strong {
+  color: #ead9c8;
+}
+
+.memories-footnote {
+  color: #efe0d2;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, .52);
+}
+
+@media (min-width: 1181px) {
+  .trying-table {
+    inset: 46vh 3vw 8vh;
+  }
+
+  .return-piece--flower {
+    right: -5vw;
+    top: 48vh;
+    height: 52vh;
+  }
+
+  .love-copy {
+    width: min(690px, 45vw);
+  }
+
+  .final-letter {
+    right: 2vw;
+    top: 44vh;
+    width: min(720px, 48vw);
+    height: min(430px, 45vh);
+  }
+}
+
+@media (min-width: 701px) {
+  .loss-object > strong {
+    display: none;
+  }
+
+  .loss-object > span {
+    top: 14px;
+    bottom: auto;
+    left: 14px;
+    padding: 5px 8px 6px;
+    border: 1px solid rgba(79, 48, 36, .14);
+    color: #70242a;
+    background: rgba(239, 226, 207, .88);
+    box-shadow: 0 8px 18px rgba(70, 42, 28, .1);
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  .loss-object--flower > span { left: 30px; }
+  .loss-object--photo > span { left: 18px; }
+  .loss-object--letter > span { left: 20px; }
+  .loss-object--thread > span {
+    top: 42px;
+    right: 12%;
+    left: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .loss-object > strong {
+    display: none;
+  }
+
+  .loss-object > span {
+    top: 10px;
+    bottom: auto;
+    left: 10px;
+    padding: 5px 7px 6px;
+    border: 1px solid rgba(79, 48, 36, .16);
+    color: #70242a;
+    background: rgba(239, 226, 207, .92);
+    box-shadow: 0 7px 16px rgba(70, 42, 28, .1);
+    font-size: clamp(12px, 3.7vw, 15px);
+    line-height: 1;
+  }
+
+  .loss-object--thread > span {
+    top: 24px;
+    right: 8%;
+    left: auto;
+  }
+}
+
+.unsent-sticky::before { color: rgba(236, 222, 207, .035); }
+.nothing-word { color: rgba(222, 191, 174, .055); }
+.love-final-word { color: rgba(142, 32, 41, .07); }
+
+
+/* Final readability + materiality pass: preserve the memory-collapse reading lane. */
+.memory-collapse::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(246, 219, 192, .18), transparent 32%),
+    radial-gradient(circle at 50% 66%, rgba(43, 23, 21, .42), transparent 46%);
+  opacity: .92;
+  pointer-events: none;
+}
+
+.memory-collapse-card {
+  z-index: 2;
+  transition: filter .35s ease, box-shadow .35s ease;
+}
+
+.memory-collapse > p {
+  z-index: 12;
+  left: 50%;
+  right: auto;
+  width: min(760px, 76vw);
+  padding: .24em .42em .3em;
+  color: #fff8ef;
+  background: linear-gradient(90deg, transparent, rgba(40, 21, 20, .68) 13%, rgba(40, 21, 20, .78) 50%, rgba(40, 21, 20, .68) 87%, transparent);
+  text-shadow: 0 2px 3px rgba(26, 13, 12, .64), 0 12px 34px rgba(18, 9, 8, .72);
+  isolation: isolate;
+}
+
+.memories-copy {
+  z-index: 30;
+}
+
+@media (min-width: 701px) {
+  .film-strip { top: 45vh; }
+}
+
+@media (max-width: 700px) {
+  .memory-collapse > p {
+    bottom: max(5.5vh, 24px);
+    width: calc(100vw - 28px);
+    padding: 12px 10px 14px;
+    font-size: clamp(25px, 7.2vw, 34px);
+    line-height: .96;
+    text-align: center;
+  }
+
+  .film-strip { top: 47vh; }
+}
+
+@media (max-width: 430px) and (max-height: 700px) {
+  .memory-collapse > p {
+    bottom: 22px;
+    font-size: clamp(23px, 7vw, 29px);
+  }
+
+  .film-strip { top: 49vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .almost-note.is-settling .almost-note__right i,
+  .almost-note.is-settling .almost-note__right b,
+  .memory-collapse-card {
+    transition: none;
+  }
+}
+
+
+/* Fold hinge materiality: a subtle live crease follows the paper state. */
+.almost-note::after {
+  content: "";
+  position: absolute;
+  z-index: 7;
+  top: 3%;
+  bottom: 3%;
+  left: 49.5%;
+  width: 3px;
+  background: linear-gradient(to right, rgba(86, 55, 40, .06), rgba(255, 248, 233, .72), rgba(86, 55, 40, .18));
+  box-shadow: 0 0 18px rgba(255, 239, 211, calc(.08 + var(--fold) * .22));
+  opacity: calc(.18 + var(--fold) * .5);
+  transform: translateX(-50%) scaleY(calc(.88 + var(--fold) * .12));
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.almost-note.is-settling::after {
+  transition: opacity .5s ease, transform .58s cubic-bezier(.16,.84,.16,1), box-shadow .5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .almost-note.is-settling::after { transition: none; }
+}
+
+
+/* Responsive protected zones — keep the collage expressive without covering essential copy. */
+@media (max-width: 700px) {
+  .nothing-copy {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    transform: none !important;
+    text-align: left;
+  }
+
+  .them-photo {
+    top: 44vh;
+    right: -30vw;
+    width: 104vw;
+    height: 35vh;
+  }
+
+  .keepsakes { top: 43vh; }
+
+  .unsent-result {
+    z-index: 91;
+    top: 41vh;
+    bottom: auto;
+    padding: 8px 10px 10px 0;
+    background: linear-gradient(90deg, rgba(24, 18, 16, .68), rgba(24, 18, 16, .28) 76%, transparent);
+  }
+
+  .draft-paper { top: 57vh; }
+  .film-strip { top: 36vh; }
+
+  .memories-footnote {
+    z-index: 96;
+    bottom: max(3.5vh, 22px);
+    width: calc(100vw - 32px);
+    padding: 10px 12px 12px;
+    background: linear-gradient(90deg, rgba(18, 14, 13, .82), rgba(18, 14, 13, .48) 78%, transparent);
+  }
+
+  .memory-bloom {
+    z-index: 18;
+    right: -30vw;
+    bottom: -14vh;
+    width: 58vw;
+    opacity: .54;
+  }
+
+  .memory-collapse-card { top: 42%; }
+
+  .memory-collapse > p {
+    z-index: 98;
+    bottom: max(4vh, 24px);
+  }
+
+  .trying-table { bottom: 22vh; }
+
+  .trying-answer {
+    z-index: 96;
+    bottom: max(3.5vh, 22px);
+    padding: 8px 10px 10px 0;
+    background: linear-gradient(90deg, rgba(239, 227, 210, .92), rgba(239, 227, 210, .68) 72%, transparent);
+    text-shadow: none;
+  }
+
+  .loss-object--thread { bottom: 8%; }
+
+  .final-letter {
+    top: 50vh;
+    height: min(300px, 36vh);
+  }
+
+  .love-footer { bottom: max(12px, 2vh); }
+}
+
+@media (max-width: 430px) and (max-height: 700px) {
+  .scene--unsent { height: 220svh; }
+  .unsent-result { top: 42vh; }
+  .draft-paper { top: 59vh; }
+  .film-strip { top: 35vh; }
+
+  .memory-frame {
+    width: 66vw;
+    min-height: 248px;
+  }
+
+  .memory-frame__image { height: 124px; }
+  .memory-collapse-card { top: 40%; }
+  .trying-table { inset: 45vh 8px 24vh; }
+
+  .loss-object--flower {
+    left: -3%;
+    top: 0;
+    width: 47vw;
+    height: 168px;
+  }
+
+  .loss-object--photo {
+    right: -3%;
+    top: 16%;
+    width: 48vw;
+    height: 156px;
+  }
+
+  .loss-object--letter {
+    left: 1%;
+    top: 47%;
+    width: 64vw;
+    height: 112px;
+  }
+
+  .loss-object--thread {
+    right: -4%;
+    bottom: 7%;
+    width: 78vw;
+    height: 70px;
+  }
+
+  .trying-answer { font-size: clamp(25px, 8vw, 31px); }
+
+  .final-letter {
+    top: 49vh;
+    height: 218px;
+  }
+}
+
+/* Small story-continuity details that stay outside the reading lanes. */
+.final-letter.was-closed::after {
+  content: "";
+  position: absolute;
+  z-index: 7;
+  left: 9%;
+  right: 9%;
+  top: 52%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(142, 32, 41, .46), transparent);
+  box-shadow: 0 0 18px rgba(142, 32, 41, .12);
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+
+.return-piece--photo.is-remembered,
+.return-piece--message.is-remembered {
+  filter: drop-shadow(0 0 18px rgba(170, 85, 88, .18));
+}
+
+.scene--memories.has-developed-photo .memories-sticky::after {
+  content: "";
+  position: absolute;
+  z-index: 12;
+  inset: 0;
+  background: radial-gradient(circle at 52% 54%, rgba(245, 211, 171, .12), transparent 34%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .final-letter.was-closed::after,
+  .return-piece--photo.is-remembered,
+  .return-piece--message.is-remembered { transition: none !important; }
+}
+
+/* Final overlap cleanup — reserve explicit reading lanes on larger canvases too. */
+@media (min-width: 701px) {
+  .memories-copy {
+    top: 12vh;
+  }
+
+  .film-strip {
+    top: 39vh;
+  }
+
+  .memories-footnote {
+    z-index: 96;
+    bottom: 3vh;
+    width: min(860px, 64vw);
+    padding: 10px 16px 12px;
+    background: linear-gradient(90deg, rgba(18, 14, 13, .8), rgba(18, 14, 13, .46) 78%, transparent);
+  }
+
+  .memory-collapse-card {
+    top: 44%;
+  }
+
+  .memory-collapse > p {
+    z-index: 98;
+    bottom: 3vh;
+  }
+
+  .love-footer {
+    right: 54vw;
+    gap: 28px;
+  }
+}
+
+@media (min-width: 1181px) {
+  .them-photo {
+    right: -2vw;
+    width: 52vw;
+  }
+
+  .memory-bloom {
+    right: -12vw;
+    bottom: -18vh;
+    width: 28vw;
+    height: 68vh;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1180px) {
+  .them-photo {
+    right: -12vw;
+    width: 46vw;
+  }
+
+  .keepsakes {
+    top: 41vh;
+  }
+
+  .keepsake > strong {
+    font-size: clamp(30px, 4.2vw, 44px);
+  }
+
+  .keepsake--1 {
+    left: 0;
+    top: 40%;
+    width: 27vw;
+    height: 210px;
+  }
+
+  .keepsake--2 {
+    left: 28%;
+    top: 3%;
+    width: 27vw;
+    height: 190px;
+  }
+
+  .keepsake--3 {
+    right: 4%;
+    left: auto;
+    top: 55%;
+    width: 24vw;
+    height: 24vw;
+  }
+
+  .keepsake--4 {
+    right: 0;
+    top: 12%;
+    width: 31vw;
+    height: 145px;
+  }
+
+  .keepsake--5 {
+    left: 30%;
+    bottom: 0;
+    width: 23vw;
+    height: 210px;
+  }
+
+  .film-strip {
+    top: 46vh;
+  }
+
+  .memory-frame {
+    min-height: 330px;
+  }
+
+  .memory-frame__image {
+    height: 180px;
+    margin-bottom: 16px;
+  }
+
+  .memory-bloom {
+    right: -22vw;
+    bottom: -18vh;
+    width: 32vw;
+    height: 66vh;
+  }
+}
+
+@media (min-width: 1181px) {
+  .keepsakes {
+    top: 40vh;
+  }
+}
+
+@media (max-width: 430px) and (max-height: 700px) {
+  .them-photo {
+    top: 65vh;
+    right: 4vw;
+    width: 44vw;
+    height: 17vh;
+  }
+
+  .keepsakes {
+    inset: 81vh 8px 3vh;
+  }
+}
+@media (max-width: 430px) and (max-height: 700px) {
+  .trying-copy > strong {
+    position: relative;
+    z-index: 12;
+    display: block;
+    width: min(72vw, 236px);
+    margin-top: 18px;
+    padding: 7px 22px 9px 0;
+    background: linear-gradient(
+      90deg,
+      rgba(247, 239, 225, 0.98) 0%,
+      rgba(247, 239, 225, 0.94) 72%,
+      rgba(247, 239, 225, 0) 100%
+    );
+  }
+}
+
+/* Let the memory timeline hand the bottom reading lane from footnote to coda cleanly. */
+.memories-footnote {
+  will-change: opacity, transform;
+}
+
+/* Interaction completion feedback — use existing lanes instead of adding floating objects. */
+.notice-resolution {
+  min-height: 1.25em;
+  margin: 5px 0 0 26px;
+  color: rgba(116, 51, 49, .72);
+  font-family: var(--font-serif);
+  font-size: clamp(13px, 1.15vw, 17px);
+  font-style: italic;
+  letter-spacing: 0;
+  line-height: 1.15;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity .35s ease, transform .35s ease, color .35s ease;
+  pointer-events: none;
+}
+
+.scene--them.has-notices .notice-resolution {
+  opacity: .78;
+  transform: translateY(0);
+}
+
+.scene--them.has-all-notices .notice-resolution {
+  color: var(--red);
+}
+
+.scene--them.has-all-notices .them-sticky::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  background: radial-gradient(circle at 70% 42%, rgba(142, 32, 41, .13), transparent 30%);
+  animation: notice-bloom .9s ease-out both;
+  pointer-events: none;
+}
+
+.scene--little.has-all-keeps .little-sticky::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: radial-gradient(circle at 78% 72%, rgba(155, 77, 53, .18), transparent 25%);
+  animation: keep-bloom 1s ease-out both;
+  pointer-events: none;
+}
+
+.scene--little.has-all-keeps .pocket {
+  color: #8f292e;
+  text-shadow: 0 0 22px rgba(142, 32, 41, .12);
+}
+
+@keyframes notice-bloom {
+  0% { opacity: 0; transform: scale(.96); }
+  45% { opacity: 1; }
+  100% { opacity: .56; transform: scale(1); }
+}
+
+@keyframes keep-bloom {
+  0% { opacity: 0; transform: scale(.97); }
+  45% { opacity: 1; }
+  100% { opacity: .6; transform: scale(1); }
+}
+
+@media (max-width: 430px) and (max-height: 700px) {
+  .notice-resolution {
+    margin-top: 2px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene--them.has-all-notices .them-sticky::after,
+  .scene--little.has-all-keeps .little-sticky::after {
+    animation: none;
+  }
+}
+
+/* Mobile keepsake composition: five readable scraps, still rotated like a loose scrapbook. */
+@media (max-width: 700px) {
+  .keepsakes {
+    inset: 42vh 10px 7vh;
+  }
+
+  .keepsake {
+    min-height: 0;
+    padding: 12px 13px 24px;
+    gap: 3px;
+  }
+
+  .keepsake > span,
+  .keepsake > small,
+  .keepsake > i {
+    font-size: 10px;
+    letter-spacing: .03em;
+  }
+
+  .keepsake > small {
+    font-size: 11px;
+    line-height: 1.12;
+  }
+
+  .keepsake > strong {
+    margin-top: 2px;
+    font-size: clamp(22px, 7.3vw, 30px);
+    line-height: .9;
+  }
+
+  .keepsake > i {
+    right: 11px;
+    bottom: 9px;
+  }
+
+  .keepsake--1 {
+    left: 0;
+    top: 2%;
+    width: 45%;
+    height: 29%;
+  }
+
+  .keepsake--2 {
+    left: auto;
+    right: 0;
+    top: 0;
+    width: 46%;
+    height: 28%;
+  }
+
+  .keepsake--3 {
+    left: 2%;
+    top: 35%;
+    width: 42vw;
+    height: 42vw;
+    padding: 13px;
+  }
+
+  .keepsake--4 {
+    left: auto;
+    right: 0;
+    top: 34%;
+    width: 48%;
+    height: 27%;
+  }
+
+  .keepsake--5 {
+    left: 25%;
+    bottom: 0;
+    width: 50%;
+    height: 28%;
+    padding-bottom: 24px;
+  }
+
+  .pocket {
+    right: 10px;
+    bottom: 1.5vh;
+  }
+}
+
+
+/* Short mobile keepsake spacing — keep the instruction lane clear. */
+@media (max-width: 430px) and (max-height: 700px) {
+  .keepsakes {
+    inset: 52vh 8px 3vh;
+  }
+
+  .keepsake--1 {
+    width: 44%;
+    height: 27%;
+  }
+
+  .keepsake--2 {
+    width: 45%;
+    height: 27%;
+  }
+
+  .keepsake--3 {
+    top: 34%;
+    width: 34vw;
+    height: 34vw;
+  }
+
+  .keepsake--4 {
+    top: 34%;
+    width: 48%;
+    height: 26%;
+  }
+
+  .keepsake--5 {
+    left: 27%;
+    width: 46%;
+    height: 26%;
+  }
+
+  .pocket {
+    right: 6px;
+    bottom: .5vh;
+  }
+}
+
+/* Short mobile Unsent handoff: instruction, result, then paper. */
+@media (max-width: 430px) and (max-height: 700px) {
+  .unsent-result {
+    top: 51vh;
+  }
+
+  .draft-paper {
+    top: 66vh;
+    min-height: 190px;
+  }
+
+  .draft-paper textarea {
+    min-height: 90px;
+  }
+}
+
+
+/* Short mobile keepsake type fit — keep every scrap internally readable. */
+@media (max-width: 430px) and (max-height: 700px) {
+  .keepsake {
+    padding: 8px 9px 14px;
+    gap: 1px;
+  }
+
+  .keepsake > span,
+  .keepsake > i {
+    font-size: 9px;
+  }
+
+  .keepsake > small {
+    font-size: 10px;
+    line-height: 1.04;
+  }
+
+  .keepsake > strong {
+    margin-top: 0;
+    font-size: clamp(20px, 6.6vw, 23px);
+    line-height: .9;
+  }
+
+  .keepsake > i {
+    right: 8px;
+    bottom: 6px;
+  }
+
+  .keepsake--1,
+  .keepsake--2 {
+    height: 30%;
+  }
+
+  .keepsake--4 {
+    height: 30%;
+  }
+
+  .keepsake--5 {
+    height: 27%;
+    padding-bottom: 14px;
+  }
+}
+
+
+/* Cross-scene memory payoff: reuse the returning objects instead of adding new copy layers. */
+.return-piece--ticket.is-remembered {
+  background:
+    linear-gradient(104deg, rgba(142, 32, 41, .08), transparent 34%),
+    #d7ba96;
+  box-shadow:
+    16px 22px 42px rgba(0,0,0,.28),
+    0 0 0 1px rgba(142, 32, 41, .18),
+    0 0 28px rgba(142, 32, 41, .13);
+}
+
+.return-piece--note.is-remembered {
+  background:
+    linear-gradient(135deg, rgba(255, 245, 223, .34), transparent 44%),
+    #e8d9c3;
+  box-shadow:
+    18px 26px 50px rgba(0,0,0,.3),
+    0 0 34px rgba(188, 116, 93, .16);
+}
+
+.scene--nothing.remembers-waiting .return-piece--note {
+  outline: 1px solid rgba(224, 147, 150, .18);
+  outline-offset: 5px;
+}
+
+.nothing-thread.is-stretched i {
+  background: linear-gradient(90deg, #8e2029 0 18%, #d75b61 42%, #8e2029 68% 100%);
+  box-shadow:
+    0 0 18px rgba(178,43,51,.34),
+    0 0 42px rgba(215,91,97,.16);
+}
+
+.nothing-thread.is-lingering i {
+  animation: remembered-thread-pulse 3.8s ease-in-out infinite;
+}
+
+.nothing-thread.is-stretched:not(.is-lingering) i {
+  animation: distance-thread-breathe 4.2s ease-in-out infinite;
+}
+
+.scene--nothing .return-piece,
+.scene--nothing .return-cloud,
+.scene--nothing .memory-storm,
+.scene--nothing .nothing-word {
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+@keyframes distance-thread-breathe {
+  0%, 100% {
+    filter: saturate(.9);
+    box-shadow: 0 0 16px rgba(178,43,51,.22), 0 0 34px rgba(215,91,97,.1);
+  }
+  50% {
+    filter: saturate(1.18);
+    box-shadow: 0 0 22px rgba(178,43,51,.38), 0 0 48px rgba(215,91,97,.18);
+  }
+}
+
+@keyframes remembered-thread-pulse {
+  0%, 100% { opacity: .72; filter: saturate(.92); }
+  50% { opacity: 1; filter: saturate(1.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nothing-thread.is-lingering i {
+    animation: none;
+    opacity: 1;
+  }
+
+  .nothing-thread.is-stretched:not(.is-lingering) i {
+    animation: none;
+  }
+
+  .scene--nothing .return-piece,
+  .scene--nothing .return-cloud,
+  .scene--nothing .memory-storm,
+  .scene--nothing .nothing-word {
+    will-change: auto;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1180px) {
+  .scene--nothing .return-piece--flower {
+    right: -14vw;
+    top: 50vh;
+    width: 24vw;
+    height: 46vh;
+  }
+}
+
+/* Short-screen Try Not to Care guardrail: keep copy, answer, and objects in separate bands. */
+@media (max-width: 430px) and (max-height: 700px) {
+  .trying-answer {
+    top: 54vh;
+    bottom: auto;
+    width: 90vw;
+    padding: 4px 8px 6px 0;
+  }
+
+  .trying-table {
+    inset: 65vh 8px 5vh;
+  }
+
+  .loss-object--flower {
+    left: -2%;
+    top: 0;
+    width: 44vw;
+    height: 145px;
+  }
+
+  .loss-object--photo {
+    right: -2%;
+    top: 12%;
+    width: 46vw;
+    height: 145px;
+  }
+
+  .loss-object--letter {
+    left: 1%;
+    top: 46%;
+    width: 60vw;
+    height: 100px;
+  }
+
+  .loss-object--thread {
+    right: -2%;
+    bottom: 4%;
+    width: 72vw;
+    height: 60px;
   }
 }

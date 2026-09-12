@@ -55,12 +55,15 @@ export default function LoveStory() {
   const [draft, setDraft] = useState("I keep thinking about you.");
   const [ghostDraft, setGhostDraft] = useState("");
   const [restoringDraft, setRestoringDraft] = useState(false);
+  const [erasedEver, setErasedEver] = useState(false);
   const [movedMemories, setMovedMemories] = useState<Set<number>>(() => new Set());
   const [photoDeveloped, setPhotoDeveloped] = useState(false);
   const [distance, setDistance] = useState(36);
   const [distanceDragging, setDistanceDragging] = useState(false);
   const [distanceChecks, setDistanceChecks] = useState(0);
+  const [distancePulledEver, setDistancePulledEver] = useState(false);
   const [missing, setMissing] = useState<Set<ThingKey>>(() => new Set());
+  const [lostEver, setLostEver] = useState<Set<ThingKey>>(() => new Set());
   const [lastAttempt, setLastAttempt] = useState<ThingKey | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [letterOpen, setLetterOpen] = useState(false);
@@ -130,6 +133,24 @@ export default function LoveStory() {
     return "you checked anyway.";
   }, [waitingChecks]);
   const ghostWords = useMemo(() => ghostDraft.trim().split(/\s+/).filter(Boolean), [ghostDraft]);
+  const noticedEverything = noticed.size === 3;
+  const keptEverything = kept.size === littleThings.length;
+  const waitedAgain = waitingChecks >= 2 || waitingLingered;
+  const checkedAcrossDistance = distanceChecks >= 2;
+  const rememberedTicket = kept.has(3);
+  const rememberedWaiting = waitingChecks > 0 || waitingLingered;
+  const memoryStormIntensity = Math.min(
+    5,
+    1
+      + Math.min(2, attempts)
+      + (rememberedWaiting ? 1 : 0)
+      + (distancePulledEver || distanceChecks > 0 ? 1 : 0),
+  );
+  const noticeResolution = noticedEverything
+    ? "by then, you were already looking."
+    : noticed.size > 0
+      ? `${noticed.size} little thing${noticed.size === 1 ? "" : "s"} stayed with you.`
+      : "";
 
   const distanceLine = distanceChecks === 0
     ? "last message · 08:41"
@@ -146,6 +167,37 @@ export default function LoveStory() {
         : lastAttempt === "letter"
           ? "you opened it again."
           : "it tied itself back together.";
+
+  const finalMemoryLine = useMemo(() => {
+    const movedPhoto = movedMemories.size > 0;
+    if (noticedEverything && keptEverything && erasedEver) {
+      if (waitedAgain || checkedAcrossDistance) {
+        return "you noticed everything. kept all five. erased the words. kept checking. all of it came back.";
+      }
+      return "you noticed every little thing. kept all five. even the words you erased came back.";
+    }
+    if (noticedEverything && keptEverything) {
+      if (waitedAgain || checkedAcrossDistance) {
+        return "you noticed everything. kept all five. kept checking. that was already an answer.";
+      }
+      return "you noticed every little thing. kept all five. that was already an answer.";
+    }
+    if (movedPhoto && erasedEver && almostFolded) {
+      return "the picture moved. the words vanished. the confession folded. all of it still made it here.";
+    }
+    if (movedPhoto && erasedEver) {
+      return "the picture moved. the words vanished. both still made it here.";
+    }
+    if (movedPhoto) return "the picture you moved still found its way back.";
+    if (erasedEver) return "even the words you erased made it here.";
+    if (almostFolded) return "even the words you folded away made it here.";
+    if (lostEver.size > 0) return "everything you tried to lose found its way back.";
+    if (waitingLingered && distancePulledEver) return "you waited past the minute. pulled the distance closer. the thread still made it here.";
+    if (waitedAgain) return "you checked even after you knew. that made it here too.";
+    if (distancePulledEver || checkedAcrossDistance) return "you pulled at the distance. the thread was still there.";
+    if (photoDeveloped) return "you stayed long enough for the picture to appear.";
+    return "you kept all of it because it mattered.";
+  }, [almostFolded, checkedAcrossDistance, distancePulledEver, erasedEver, keptEverything, lostEver, movedMemories, noticedEverything, photoDeveloped, waitedAgain, waitingLingered]);
 
   const toggleNotice = (index: number) => {
     setNoticed((current) => {
@@ -167,6 +219,7 @@ export default function LoveStory() {
     if (!draft.trim()) return;
     setGhostDraft(draft);
     setDraft("");
+    setErasedEver(true);
   };
 
   const restoreDraft = () => {
@@ -223,6 +276,12 @@ export default function LoveStory() {
   const tryToLose = (key: ThingKey) => {
     setAttempts((count) => count + 1);
     setLastAttempt(key);
+    setLostEver((current) => {
+      if (current.has(key)) return current;
+      const next = new Set(current);
+      next.add(key);
+      return next;
+    });
     setMissing((current) => new Set(current).add(key));
     const previous = returnTimers.current.get(key);
     if (previous) window.clearTimeout(previous);
@@ -288,7 +347,7 @@ export default function LoveStory() {
   return (
     <main ref={rootRef} className={`love-journey ${letterOpen ? "love-journey--open" : ""}`}>
       <div className="journey-progress" aria-hidden="true"><i /></div>
-      <LivingThread cut={missing.has("thread")} scarred={false} tension={distance} />
+      <LivingThread cut={missing.has("thread")} scarred={lostEver.has("thread")} tension={distance} />
 
       <section id="fine" className="scene scene--fine" data-chapter="00">
         <div className="fine-sticky">
@@ -321,7 +380,11 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="them" className="scene scene--them" data-chapter="01">
+      <section
+        id="them"
+        className={`scene scene--them ${noticed.size > 0 ? "has-notices" : ""} ${noticedEverything ? "has-all-notices" : ""}`}
+        data-chapter="01"
+      >
         <div className="them-sticky">
           <Chapter number="01" label="THERE WAS THEM" />
           <div className="them-word" aria-hidden="true">them</div>
@@ -338,18 +401,27 @@ export default function LoveStory() {
             <h2>It just felt<br />different with<br /><em>them in it.</em></h2>
             <strong>Then you started noticing.</strong>
           </div>
-          <div className="notice-points" aria-label="Things you noticed">
+          <div
+            className="notice-points"
+            aria-label="Things you noticed"
+            style={{ "--notice-progress": noticed.size / 3 } as React.CSSProperties}
+          >
             {["the sleeve pushed up", "the pause before they laughed", "your name in their handwriting"].map((item, index) => (
               <button key={item} type="button" className={noticed.has(index) ? "is-noticed" : ""} onClick={() => toggleNotice(index)}>
                 <i aria-hidden="true" />
                 <span>{noticed.has(index) ? item : "notice"}</span>
               </button>
             ))}
+            <p className="notice-resolution" aria-live="polite">{noticeResolution}</p>
           </div>
         </div>
       </section>
 
-      <section id="little-things" className="scene scene--little" data-chapter="02">
+      <section
+        id="little-things"
+        className={`scene scene--little ${kept.size > 0 ? "has-keeps" : ""} ${keptEverything ? "has-all-keeps" : ""}`}
+        data-chapter="02"
+      >
         <div className="little-sticky">
           <Chapter number="02" label="THE LITTLE THINGS" />
           <div className="little-heading">
@@ -413,7 +485,11 @@ export default function LoveStory() {
             <h2>You almost<br /><em>said it.</em></h2>
             <strong>Then made the feeling smaller enough to carry.</strong>
           </div>
-          <FoldedConfession folded={almostFolded} onFolded={() => setAlmostFolded(true)} />
+          <FoldedConfession
+            folded={almostFolded}
+            onFolded={() => setAlmostFolded(true)}
+            onUnfolded={() => setAlmostFolded(false)}
+          />
           <p className="almost-result" aria-live="polite">
             {almostFolded ? "you folded it instead." : "swipe left across the paper."}
           </p>
@@ -502,6 +578,7 @@ export default function LoveStory() {
         style={{
           "--distance": `${distance}%`,
           "--distance-shift": `${Math.max(0, distance - 30) * 0.36}vw`,
+          "--distance-tension": Math.max(0, Math.min(1, (distance - 18) / 70)),
         } as React.CSSProperties}
       >
         <div className="distance-sticky">
@@ -527,7 +604,10 @@ export default function LoveStory() {
               onPointerDown={() => setDistanceDragging(true)}
               onPointerUp={releaseDistance}
               onPointerCancel={releaseDistance}
-              onChange={(event) => setDistance(Number(event.currentTarget.value))}
+              onChange={(event) => {
+                setDistancePulledEver(true);
+                setDistance(Number(event.currentTarget.value));
+              }}
             />
             <small>{distance < 45 ? "close enough to pretend nothing changed" : distance < 72 ? "the thread stretches" : "still attached"}</small>
           </div>
@@ -552,6 +632,7 @@ export default function LoveStory() {
                 type="button"
                 key={key}
                 className={`loss-object loss-object--${key} loss-object--${index + 1} ${missing.has(key) ? "is-gone" : ""}`}
+                aria-label={`${verb} ${title}`}
                 onClick={() => tryToLose(key)}
                 onPointerMove={moveLight}
               >
@@ -565,11 +646,15 @@ export default function LoveStory() {
         </div>
       </section>
 
-      <section id="nothing-disappeared" className="scene scene--nothing" data-chapter="09">
+      <section
+        id="nothing-disappeared"
+        className={`scene scene--nothing ${rememberedWaiting ? "remembers-waiting" : ""} ${distancePulledEver || distanceChecks > 0 ? "remembers-distance" : ""}`}
+        data-chapter="09"
+      >
         <div className="nothing-sticky">
           <Image className="nothing-image" src="/art/archive-gpt-image-2.png" alt="" fill sizes="100vw" />
           <div className="nothing-vignette" aria-hidden="true" />
-          <MemoryStormCanvas intensity={Math.max(1, attempts)} />
+          <MemoryStormCanvas intensity={memoryStormIntensity} />
           <div className="nothing-word" aria-hidden="true">nothing</div>
           <Chapter number="09" label="NOTHING DISAPPEARED" light />
           <div className="nothing-copy">
@@ -579,13 +664,12 @@ export default function LoveStory() {
           </div>
           <div className="return-cloud" aria-hidden="true">
             <div className="return-piece return-piece--flower"><Image src="/art/motif-cutout.png" alt="" fill sizes="22vw" /></div>
-            <div className="return-piece return-piece--photo"><Image src="/art/motif-gpt-image-1.png" alt="" fill sizes="22vw" /></div>
-            <div className="return-piece return-piece--message">I keep thinking about you.</div>
-            <div className="return-piece return-piece--ticket">row g · seat 12</div>
-            <div className="return-piece return-piece--date">11</div>
-            <div className="return-piece return-piece--note">text me when you get home</div>
+            <div className={`return-piece return-piece--photo ${movedMemories.size ? "is-remembered" : ""}`}><Image src="/art/motif-gpt-image-1.png" alt="" fill sizes="22vw" /></div>
+            <div className={`return-piece return-piece--message ${erasedEver ? "is-remembered" : ""}`}>I keep thinking about you.</div>
+            <div className={`return-piece return-piece--ticket ${rememberedTicket ? "is-remembered" : ""}`}>row g · seat 12</div>
+            <div className={`return-piece return-piece--note ${rememberedWaiting ? "is-remembered" : ""}`}>text me when you get home</div>
           </div>
-          <div className="nothing-thread" aria-hidden="true"><i /></div>
+          <div className={`nothing-thread ${distancePulledEver || distanceChecks > 0 ? "is-stretched" : ""} ${waitingLingered ? "is-lingering" : ""}`} aria-hidden="true"><i /></div>
         </div>
       </section>
 
@@ -600,10 +684,10 @@ export default function LoveStory() {
             <h2>Love won<br /><em>anyway.</em></h2>
             <strong>You can stop pretending in here.</strong>
           </div>
-          <div className={`final-letter ${letterHolding ? "is-holding" : ""}`}>
+          <div className={`final-letter ${letterHolding ? "is-holding" : ""} ${lostEver.has("letter") ? "was-closed" : ""}`}>
             <div className="final-letter__back" />
             <div className="final-letter__page">
-              <span>{letterOpen ? "you kept all of it because it mattered." : "still thinking about them?"}</span>
+              <span>{letterOpen ? finalMemoryLine : "still thinking about them?"}</span>
               <strong>{letterOpen ? "that was the answer." : "you already know."}</strong>
             </div>
             <div className="final-letter__flap" aria-hidden="true" />

@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 type FoldedConfessionProps = {
   folded: boolean;
   onFolded: () => void;
+  onUnfolded: () => void;
 };
 
 type GestureIntent = "pending" | "folding" | "scrolling";
@@ -19,9 +20,10 @@ type GestureState = {
   progress: number;
 };
 
-export default function FoldedConfession({ folded, onFolded }: FoldedConfessionProps) {
+export default function FoldedConfession({ folded, onFolded, onUnfolded }: FoldedConfessionProps) {
   const rootRef = useRef<HTMLButtonElement>(null);
   const settleTimerRef = useRef<number | null>(null);
+  const suppressClickRef = useRef(false);
   const gestureRef = useRef<GestureState>({
     active: false,
     pointerId: -1,
@@ -52,13 +54,14 @@ export default function FoldedConfession({ folded, onFolded }: FoldedConfessionP
     settleTimerRef.current = window.setTimeout(() => {
       root.classList.remove("is-settling");
       settleTimerRef.current = null;
-    }, 460);
+    }, 620);
 
     if (target === 1 && !folded) onFolded();
+    if (target === 0 && folded) onUnfolded();
   };
 
   useEffect(() => {
-    apply(folded ? 1 : gestureRef.current.progress);
+    apply(folded ? 1 : 0);
   }, [folded]);
 
   useEffect(() => () => {
@@ -129,7 +132,10 @@ export default function FoldedConfession({ folded, onFolded }: FoldedConfessionP
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
 
-    if (wasFolding) settle(state.progress >= 0.55 ? 1 : 0);
+    if (wasFolding) {
+      suppressClickRef.current = true;
+      settle(state.progress >= 0.55 ? 1 : 0);
+    }
   };
 
   const cancel = (event: React.PointerEvent<HTMLButtonElement>) => {
@@ -143,9 +149,17 @@ export default function FoldedConfession({ folded, onFolded }: FoldedConfessionP
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (folded || (event.key !== "Enter" && event.key !== " ")) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
-    settle(1);
+    settle(folded ? 0 : 1);
+  };
+
+  const onClick = () => {
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+    if (folded) settle(0);
   };
 
   return (
@@ -153,13 +167,14 @@ export default function FoldedConfession({ folded, onFolded }: FoldedConfessionP
       ref={rootRef}
       type="button"
       className={`almost-note ${folded ? "is-folded" : ""}`}
-      aria-label={folded ? "The confession is folded" : "Swipe left across the confession to fold it"}
+      aria-label={folded ? "Open the folded confession" : "Swipe left across the confession to fold it"}
       aria-pressed={folded}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={release}
       onPointerCancel={cancel}
       onKeyDown={onKeyDown}
+      onClick={onClick}
     >
       <span className="almost-note__left">
         <i>you wrote one honest line.</i>
